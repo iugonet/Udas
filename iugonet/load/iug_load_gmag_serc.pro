@@ -44,10 +44,10 @@
 ;ACKNOWLEDGMENT:
 ;
 ;
-; $LastChangedBy: $
-; $LastChangedDate: $
-; $LastChangedRevision: $
-; $URL: $
+; $LastChangedBy: nikos $
+; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
+; $LastChangedRevision: 23337 $
+; $URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/spdsoft/tags/spedas_2_00/projects/iugonet/load/iug_load_gmag_serc.pro $
 ;-
 
 ;**************************
@@ -121,8 +121,8 @@ for i=0, nsites-1 do begin
   source.remote_data_dir = 'http://magdas.serc.kyushu-u.ac.jp/whi/data/'
 
   ; download data
-  local_files = file_retrieve(relpathnames, _extra=source)
-
+  local_files = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
+  
   ; if downloadonly set, go to the top of this loop
   if keyword_set(downloadonly) then continue
 

@@ -30,8 +30,8 @@
 ; Written by: M.Yagi, May 14, 2014
 ;             PPARC, Tohoku Univ.
 ;
-;   $LastChangedBy: M.Yagi $
-;   $LastChangedDate: 2014-05-14 $
+;   $LastChangedBy: nikos $
+;   $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
 ;   $URL:
 ;-
 pro iug_load_avon_vlfb, site=site, parameter=parameter, $
@@ -89,7 +89,7 @@ for i=0,n_elements(site_code)-1 do begin
 
   ;--- Download file
   relfnames = fileyear+'/'+fileday+'/'+'vlf_waveform_'+strlowcase(site_code[i])+'_'+filedate+'_v01.cdf'
-  datfiles  = file_retrieve(relfnames, _extra=source)
+  datfiles = spd_download(remote_file=relfnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
 
   print, source.remote_data_dir+relfnames
 

@@ -34,10 +34,10 @@
 ;
 ; Written by: Y.-M Tanaka, Apr 22, 2010 (ytanaka at nipr.ac.jp)
 ;
-;   $LastChangedBy$
-;   $LastChangedDate$
-;   $LastChangedRevision$
-;   $URL$
+;   $LastChangedBy: jwl $
+;   $LastChangedDate: 2014-01-22 15:54:40 -0800 (Wed, 22 Jan 2014) $
+;   $LastChangedRevision: 13976 $
+;   $URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/spdsoft/tags/spedas_2_00/projects/iugonet/load/iug_load_gmag_mm210.pro $
 ;-
 
 pro iug_load_gmag_mm210, site=site, datatype=datatype, $

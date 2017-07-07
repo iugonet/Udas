@@ -115,7 +115,7 @@ PRO iug_load_smart, datatype=datatype, filter=filter, $
         source.local_data_dir = local_data_dir
         source.remote_data_dir = remote_data_dir
         fpath = ''
-        fpath = file_retrieve( fname, _extra=source, /last_version )
+        fpath = spd_download(remote_file=fname, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
         
         IF fpath NE '' THEN append_array, loaded_flist, fpath
       ENDFOR

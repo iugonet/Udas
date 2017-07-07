@@ -142,7 +142,7 @@ for i=0,n_elements(site_code)-1 do begin
       relpathnames1 + '/nipr_h0_'+instr+datatype[j]+'_'+site_code[i]+'_'+$
       relpathnames2 + '_v??.cdf'
 
-    files = file_retrieve(relpathnames, _extra=source, /last_version)
+    files = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
 
     filestest=file_test(files)
       if total(filestest) ge 1 then begin

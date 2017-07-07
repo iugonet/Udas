@@ -105,8 +105,7 @@ for i=0,n_elements(site_code)-1 do begin
 
   ;--- Download the designated data files from the remote data server
   ;    if the local data files are older or do not exist. 
-  files = file_retrieve(relpathnames, _extra=source, /last_version, $
-            no_server=no_server, no_download=no_download)
+  files = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, no_server=no_server, no_download=no_download, _extra=source, /last_version)
   filestest=file_test(files)
 
   if(total(filestest) ge 1) then begin

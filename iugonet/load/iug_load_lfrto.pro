@@ -39,8 +39,8 @@
 ; Written by: M.Yagi, Oct 2, 2012
 ;             PPARC, Tohoku Univ.
 ;
-;   $LastChangedBy: M.Yagi $
-;   $LastChangedDate: 2013-01-09 $
+;   $LastChangedBy: nikos $
+;   $LastChangedDate: 2016-05-23 10:40:20 -0700 (Mon, 23 May 2016) $
 ;   $URL:
 ;-
 pro iug_load_lfrto, site=site, trans=trans, parameter=parameter, datatype=datatype,$

@@ -89,7 +89,7 @@ for i=0,n_elements(site_code)-1 do begin
 
 print, relpathnames
 
-    files = file_retrieve(relpathnames, _extra=source, /last_version)
+    files = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
 
     filestest=file_test(files)
     if total(filestest) ge 1 then begin

@@ -62,7 +62,7 @@ function iug_load_gmag_wdc_qddays, $
   if (keyword_set(no_download)) then source.no_server = 1
     
   ; download data
-  local_files = file_retrieve(relpathnames, _extra=source)
+  local_files = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
   print, local_files
   if keyword_set(downloadonly) then return, 0
     

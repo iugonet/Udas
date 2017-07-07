@@ -93,7 +93,7 @@ for i=0, n_elements(site_code)-1 do begin
               sitetmp+'YYYYMMDD_h2t1.txt'
   relpathnames = file_dailynames(file_format=pathformat, $
                                  trange=trange)
-  files = file_retrieve(relpathnames, _extra=source, /last_version)
+  files = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
 
   filestest=file_test(files)
 

@@ -33,9 +33,9 @@
 ; A. Shinbori, 24/01/2014.
 ; 
 ;ACKNOWLEDGEMENT:
-; $LastChangedBy:  $
-; $LastChangedDate:  $
-; $LastChangedRevision:  $
+; $LastChangedBy: nikos $
+; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
+; $LastChangedRevision: 23337 $
 ; $URL $
 ;-
 
@@ -91,7 +91,7 @@ for ii=0L,n_elements(parameters)-1 do begin
      ;=======================================================  
      ;Get files and local paths, and concatenate local paths:
      ;=======================================================
-      local_paths=file_retrieve(file_names,_extra=source, /last_version)
+      local_paths = spd_download(remote_file=file_names, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
       local_paths_all = ~(~size(local_paths_all,/type)) ? $
                         [local_paths_all, local_paths] : local_paths
       if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all

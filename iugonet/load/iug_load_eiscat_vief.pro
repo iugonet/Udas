@@ -77,7 +77,7 @@ for i=0,n_elements(site_code)-1 do begin
     relpathnames  = 'vief/'+site+'/'+relpathnames1+$
                     '/eiscat_kn_'+site+'_vief_'+relpathnames2+'_v??.cdf'
 
-    files = file_retrieve(relpathnames, _extra=source, /last_version)
+    files = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
 
     ;----- Print PI info and rules of the road -----;
     if(file_test(files[0]) and (ack_flg eq 0)) then begin

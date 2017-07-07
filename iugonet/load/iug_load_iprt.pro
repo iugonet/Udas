@@ -48,7 +48,7 @@
 ;Acknowledgment:
 ;
 ;
-; $URL: $
+; $URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/spdsoft/tags/spedas_2_00/projects/iugonet/load/iug_load_iprt.pro $
 ;-
 
 
@@ -127,8 +127,7 @@ source.local_data_dir = root_data_dir() + 'iugonet/tohokuU/iit/'
 source.remote_data_dir = 'http://radio.gp.tohoku.ac.jp/db/IPRT-SUN/DATA2/'
 
 ; download data
-;local_files = file_retrieve(relpathnames, _extra=source)
-local_files = file_retrieve(relpathnames, _extra=source, /last_version)
+local_paths = spd_download(remote_file=relpathnames, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
 
 ; if downloadonly set, go to the top of this loop
 if keyword_set(downloadonly) then return
