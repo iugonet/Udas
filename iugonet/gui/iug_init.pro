@@ -48,6 +48,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   ear:                   0b, $
                   gmag_wdc_dst:          0b, $
                   gmag_wdc_ae_asy:       0b, $
+                  gmag_wdc_wp:           0b, $
                   gmag_wdc:              0b, $
                   gmag_mm210_adl:        0b, $
                   gmag_mm210_bik:        0b, $

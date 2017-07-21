@@ -54,6 +54,7 @@ case instrument of
           'ASY_index': iug_var = !iugonet.data_policy.gmag_wdc_ae_asy
           'AE_index' : iug_var = !iugonet.data_policy.gmag_wdc_ae_asy
           'Dst_index': iug_var = !iugonet.data_policy.gmag_wdc_dst
+          'Wp_index': iug_var = !iugonet.data_policy.gmag_wdc_wp
         endcase
     end
     'geomagnetic_field_fluxgate': begin
@@ -256,6 +257,7 @@ endif else begin
                     'ASY_index': !iugonet.data_policy.gmag_wdc_ae_asy = iug_var
                     'AE_index' : !iugonet.data_policy.gmag_wdc_ae_asy = iug_var
                     'Dst_index': !iugonet.data_policy.gmag_wdc_dst = iug_var
+                    'Wp_index': !iugonet.data_policy.gmag_wdc_wp = iug_var
                 endcase
             end
             'geomagnetic_field_fluxgate': begin

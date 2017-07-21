@@ -6,8 +6,8 @@
 ;  Modularized gui iugonet data loader
 ;
 ;HISTORY:
-;$LastChangedBy: jimm $
-;$LastChangedDate: 2014-02-11 10:52:58 -0800 (Tue, 11 Feb 2014) $
+;$LastChangedBy: nikos $
+;$LastChangedDate: 2016-05-23 10:40:20 -0700 (Mon, 23 May 2016) $
 ; 
 ;Modifications:
 ;A. Shinbori, 12/05/2010
@@ -165,6 +165,11 @@ pro iug_ui_load_data_load_pro,    $
                       endfor
                   endelse
                   par_names=tnames('wdc_mag_'+vns+'*')  
+              end
+              'Wp_index': begin
+                  vns='Wp'
+                  iug_load_gmag_wdc, site=vns, trange=timeRange
+                  par_names=tnames('wdc_mag_'+vns+'*')
               end
           endcase
       end
