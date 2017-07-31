@@ -1,15 +1,15 @@
 ==================================================================
-; UDAS plug-in software package for spedas_1_00 (UDAS ver.s1.00.1)
-;                                                 October 28, 2014
+; UDAS plug-in software package for spedas_2_00 (UDAS ver.s2.00.1)
+;                                                    July 31, 2017
 ==================================================================
 
   UDAS is a plug-in software package for SPEDAS (Space Physics Environment 
 Data Analysis Software; http://themis.ssl.berkeley.edu/software.shtml). UDAS 
 consists of IDL procedures to download, visualize, and analyze observational 
 data distributed from the IUGONET institutions(*). For detailed information 
-on IUGONET, please see the project website at http://www.iugonet.org/en/.
+on IUGONET, please see the project website at http://www.iugonet.org/?lang=en.
   Our software has been developed in collaboration with ERG Science Center 
-(ERG-SC website: http://gemsissc.stelab.nagoya-u.ac.jp/erg/).
+(ERG-SC website: https://ergsc.isee.nagoya-u.ac.jp/index.shtml.en).
 
 (*) IUGONET institutions:
 - Planetary Plasma and Atmospheric Research Center, Tohoku University
@@ -44,13 +44,17 @@ Load procedures for IUGONET data:
 - iug_load_avon_vlfb    ; AVON(Asia VLF Observation Network)/VLF-B data
 - iug_load_aws_rish     ; Automatic weather station data from RISH, Kyoto Univ
 - iug_load_blr_rish     ; Boundary layer radar data from RISH
-- iug_load_gps_ro_rish  ; GPS radio occultation full spectral inversion data from RISH, Kyoto Univ
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
 - iug_load_eiscat_vief  ; EISCAT ion velocity and electric field vetor data
+- iug_load_gmag_magdas_1sec ; Alias for "erg_load_gmag_magdas_1sec"
+- iug_load_gmag_mm210   ; Alias for "erg_load_gmag_mm210"
 - iug_load_gmag_nipr    ; Fluxgate magnetometer data from NIPR
+- iug_load_gmag_stel_fluxgate ; Alias for "erg_load_gmag_stel_fluxgate"
 - iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
 - iug_load_gmag_nipr_induction ; Induction magnetometer data from NIPR
+- iug_load_gmag_stel_induction ; Alias for "erg_load_gmag_stel_induction"
+- iug_load_gps_ro_rish  ; GPS radio occultation full spectral inversion data from RISH, Kyoto Univ
 - iug_load_hf_tohokuu   ; Jupiter's/solar wide band spectral data in HF-band
 - iug_load_ionosonde_rish ; Ionogram data taken by the ionosonde at Shigaraki
 - iug_load_iprt	        ; Iitate Planetary Ratio Telescope data from Tohoku Univ
@@ -62,13 +66,9 @@ Load procedures for IUGONET data:
 - iug_load_mf_rish      ; MF radar data from RISH
 - iug_load_mu           ; Middle Upper (MU) atmosphere radar data from RISH
 - iug_load_radiosonde_rish ; Radiosonde data from RISH
-- iug_load_smart        : SMART solar images from the Hida Observatory, Kyoto.
-- iug_load_wpr_rish     ; Wind profiler radar (LQ7) from RISH
-- iug_load_gmag_magdas_1sec ; Alias for "erg_load_gmag_magdas_1sec"
-- iug_load_gmag_mm210   ; Alias for "erg_load_gmag_mm210"
-- iug_load_gmag_stel_fluxgate ; Alias for "erg_load_gmag_stel_fluxgate"
-- iug_load_gmag_stel_induction ; Alias for "erg_load_gmag_stel_induction"
 - iug_load_sdfit        ; Alias for "erg_load_sdfit"
+- iug_load_smart        ; SMART solar images from the Hida Observatory, Kyoto.
+- iug_load_wpr_rish     ; Wind profiler radar (LQ7) from RISH
 
 <plot>
 Plot procedures for IUGONET data
@@ -147,6 +147,7 @@ GUI:
 - geomag._index         Dst_index       WDC_kyoto       *       2006-12-01
                         AE_index        WDC_kyoto       *       2006-12-01
                         ASY_index       WDC_kyoto       *       2006-12-01
+                        Wp_index        WDC_kyoto       *       2006-12-01
 - GPS_radio_occultation troposphere 	champ		*	2006-05-01
 - HF_radio_spectrometer Sun_or_Jupiter  iit             *       2004-01-09
 - IPRT                  Sun             iit             *       2010-11-01
@@ -173,14 +174,14 @@ GUI:
 +        !!! NOTICE !!!        +
 ++++++++++++++++++++++++++++++++
 1. SuperDARN radar data in CDF are distributed by ERG project science
-center (ERG-SC) at Solar-Terrestrial Environment Laboratory, Nagoya
-University, in collaboration with SuperDARN PI groups. For use of the
-SuperDARN data, it is highly recommended to install the latest ERG-SC
-plug-in libraries which are available from
-http://gemsissc.stelab.nagoya-u.ac.jp/erg_socware/bleeding_edge/. 
-Asfor questions about the data and the plug-in package, please feel 
-freeto contact the ERG-SC office (E-mail: erg-sc-core at
-st4a.stelab.nagoya-u.ac.jp).
+center (ERG-SC) at Institute for Space-Earth Environmental Research 
+(ISEE), Nagoya University, in collaboration with SuperDARN PI groups.
+For use of the SuperDARN data, it is highly recommended to install 
+the latest ERG-SC plug-in libraries which are available from
+https://ergsc.isee.nagoya-u.ac.jp/analysis/spedas/index.shtml.en/. 
+As for questions about the data and the plug-in package, please feel 
+freeto contact the ERG-SC office (E-mail: erg-sc-core at 
+isee.nagoya-u.ac.jp).
 
 2. Kyushu GCM data are prepared for the Research Project No.3 (Atmospheric 
 studies on Arctic change and its global impacts) in the Green Network of 
@@ -190,8 +191,8 @@ Database construction of the Kyushu GCM data is financially supported by
 the GRENE Arctic Climate Change Research Project.
 
 3. You can get useful information of our data (ex., data availability, 
-contact person, access URL, etc...) at the IUGONET metadata database:
-http://search.iugonet.org/iugonet/.
+contact person, access URL, etc...) at the IUGONET metadata database 
+(IUGONET Type-A): http://search.iugonet.org/.
 
 4. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
