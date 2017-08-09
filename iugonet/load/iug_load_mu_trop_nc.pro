@@ -27,6 +27,7 @@
 ; A. Shinbori, 19/12/2012.
 ; A. Shinbori, 27/07/2013.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 09/08/2017.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -66,12 +67,17 @@ height_zm=strsplit('1.998,2.145,2.293,2.441,2.589,2.736,2.884,3.032,3.179,3.327,
 ;---Data list which applies the above height data:
 f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 9.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -295,6 +301,13 @@ if (downloadonly eq 0) then begin
       ncdf_close,cdfid  ; done   
    endfor
 
+  ;==============================================================
+  ;Change time window associated with a time shift from UT to LT:
+  ;==============================================================
+   get_timespan, time
+   timespan, time[0] + 3600.0d * 9.0d, day_org
+   get_timespan, init_time
+
    if n_elements(mu_time) gt 1 then begin
      ;---Definition of arrary names
       bname2=strarr(n_elements(beam))
@@ -322,6 +335,9 @@ if (downloadonly eq 0) then begin
         ;---Create tplot variable for zonal wind:
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))        
          store_data,'iug_mu_trop_uwnd',data={x:mu_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
+
+        ;----Edge data cut:
+         time_clip,'iug_mu_trop_uwnd', init_time[0], init_time[1], newname = 'iug_mu_trop_uwnd'
          
         ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_uwnd')
@@ -333,6 +349,9 @@ if (downloadonly eq 0) then begin
           
         ;---Create tplot variable for meridional wind:
          store_data,'iug_mu_trop_vwnd',data={x:mu_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
+
+        ;----Edge data cut:
+         time_clip,'iug_mu_trop_vwnd', init_time[0], init_time[1], newname = 'iug_mu_trop_vwnd'
         
         ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_vwnd')
@@ -344,6 +363,9 @@ if (downloadonly eq 0) then begin
          
         ;---Create tplot variable for vertical wind:
          store_data,'iug_mu_trop_wwnd',data={x:mu_time, y:ver_wind, v:height_vw},dlimit=dlimit
+
+        ;----Edge data cut:
+         time_clip,'iug_mu_trop_wwnd', init_time[0], init_time[1], newname = 'iug_mu_trop_wwnd'
         
         ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_wwnd')
@@ -365,6 +387,9 @@ if (downloadonly eq 0) then begin
           
            ;---Create tplot variable for echo power:
             store_data,'iug_mu_trop_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
+
+           ;----Edge data cut:
+            time_clip,'iug_mu_trop_pwr'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_pwr'+bname[l]
           
            ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_pwr*')
@@ -381,6 +406,9 @@ if (downloadonly eq 0) then begin
             
            ;---Create tplot variable for spectral width: 
             store_data,'iug_mu_trop_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
+
+           ;----Edge data cut:
+            time_clip,'iug_mu_trop_wdt'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_wdt'+bname[l]
            
            ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_wdt*')
@@ -397,6 +425,9 @@ if (downloadonly eq 0) then begin
             
            ;---Create tplot variable for Doppler velocity:          
             store_data,'iug_mu_trop_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
+
+           ;----Edge data cut:
+            time_clip,'iug_mu_trop_dpl'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_dpl'+bname[l]
             
            ;---Add options and tdegap: 
             new_vars=tnames('iug_mu_trop_dpl*')
@@ -411,6 +442,9 @@ if (downloadonly eq 0) then begin
            
            ;---Create tplot variable for noise level:
             store_data,'iug_mu_trop_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
+
+           ;----Edge data cut:
+            time_clip,'iug_mu_trop_pn'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_pn'+bname[l]
             
            ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_pn*')

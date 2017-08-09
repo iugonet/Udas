@@ -27,7 +27,8 @@
 ;  
 ;MODIFICATIONS:
 ;  A. Shinbori, 24/01/2014.
-;   
+;  A. Shinbori, 08/08/2017. 
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
 ; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
@@ -63,12 +64,17 @@ endif
 
 print, site_code
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 9.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -193,7 +199,14 @@ if (downloadonly eq 0) then begin
        append_array, aws_vwnd, vwnd  
        free_lun,lun  
     endfor
-         
+    
+   ;==============================================================
+   ;Change time window associated with a time shift from UT to LT:
+   ;==============================================================
+    get_timespan, time
+    timespan, time[0] + 3600.0d * 9.0d, day_org
+    get_timespan, init_time         
+    
    ;==============================
    ;Store data in TPLOT variables:
    ;==============================
@@ -215,6 +228,13 @@ if (downloadonly eq 0) then begin
       store_data,'iug_aws_sgk_rh',data={x:aws_time, y:aws_rh},dlimit=dlimit
       store_data,'iug_aws_sgk_uwnd',data={x:aws_time, y:aws_uwnd},dlimit=dlimit
       store_data,'iug_aws_sgk_vwnd',data={x:aws_time, y:aws_vwnd},dlimit=dlimit
+
+     ;----Edge data cut:
+      time_clip, 'iug_aws_sgk_press', init_time[0], init_time[1], newname = 'iug_aws_sgk_press'
+      time_clip, 'iug_aws_sgk_rh', init_time[0], init_time[1], newname = 'iug_aws_sgk_rh'
+      time_clip, 'iug_aws_sgk_temp', init_time[0], init_time[1], newname = 'iug_aws_sgk_temp'
+      time_clip, 'iug_aws_sgk_uwnd', init_time[0], init_time[1], newname = 'iug_aws_sgk_uwnd'
+      time_clip, 'iug_aws_sgk_vwnd', init_time[0], init_time[1], newname = 'iug_aws_sgk_vwnd'
       
      ;---Options of each tplot variable 
       new_vars=tnames('iug_aws_sgk_press')

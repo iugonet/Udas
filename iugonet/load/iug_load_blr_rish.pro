@@ -38,6 +38,7 @@
 ;  A. Shinbori, 17/12/2012.
 ;  A. Shinbori, 27/02/2013.
 ;  A. Shinbori, 24/01/2014.
+;  A. Shinbori, 08/08/2017.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -98,12 +99,16 @@ site_data_dir = strsplit('ktb/blr/ sgk/blr/ srp/blr/ ',' ', /extract)
 ;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -112,6 +117,8 @@ h=0L
 jj=0L
 k=0L
 n_site=intarr(n_elements(site_data_dir))
+time_shift =dblarr(n_elements(site_data_dir))
+
 start_time=time_double('1992-4-13')
 end_time=time_double('1992-8-29')
 
@@ -123,6 +130,11 @@ if n_elements(site_code) le n_elements(site_data_dir) then begin
          'ktb':n_site[i]=0
          'sgk':n_site[i]=1 
          'srp':n_site[i]=2 
+      endcase
+      case site_code[i] of
+        'ktb':time_shift[i] = 9
+        'sgk':time_shift[i] = 7
+        'srp':time_shift[i] = 7
       endcase
    endfor
 endif
@@ -138,6 +150,11 @@ for ii=0L,h_max-1 do begin
             'srp':site_code2='serpong' 
          endcase
          
+        ;==============================================================
+        ;Change time window associated with a time shift from UT to LT:
+        ;==============================================================
+         timespan, init_time[0] - 3600.0d * time_shift[ii], day         
+        
         ;****************************  
         ;Get files for ith component:
         ;****************************
@@ -269,7 +286,14 @@ for ii=0L,h_max-1 do begin
             endwhile 
             free_lun,lun  
          endfor
-   
+
+        ;==============================================================
+        ;Change time window associated with a time shift from UT to LT:
+        ;==============================================================
+         get_timespan, time
+         timespan, time[0] + 3600.0d * time_shift[ii], day_org
+         get_timespan, init_time
+            
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================
@@ -294,6 +318,9 @@ for ii=0L,h_max-1 do begin
            ;---Create the tplot variables:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))            
             store_data,'iug_blr_'+site_code[ii]+'_'+parameters[iii],data={x:blr_time, y:blr_data, v:altitude},dlimit=dlimit
+
+           ;----Edge data cut:
+            time_clip, 'iug_blr_'+site_code[ii]+'_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_blr_'+site_code[ii]+'_'+parameters[iii]
            
            ;---Options of each tplot variable
             new_vars=tnames('iug_blr_'+site_code[ii]+'_'+parameters[iii])

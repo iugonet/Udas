@@ -28,6 +28,7 @@
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 09/08/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -45,12 +46,17 @@ pro iug_load_mu_iono_pwr_nc, downloadonly = downloadonly, $
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 9.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -188,6 +194,13 @@ if (downloadonly eq 0) then begin
       ncdf_close,cdfid  ; done
    endfor
 
+  ;==============================================================
+  ;Change time window associated with a time shift from UT to LT:
+  ;==============================================================
+   get_timespan, time
+   timespan, time[0] + 3600.0d * 9.0d, day_org
+   get_timespan, init_time
+
   ;==============================
   ;Store data in TPLOT variables:
   ;==============================
@@ -205,15 +218,30 @@ if (downloadonly eq 0) then begin
      ;---Create tplot variable for echo power: 
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'Y. Yamamoto'))
       store_data,'iug_mu_iono_pwr1',data={x:site_time, y:pwr1_app,v:height[*,0]},dlimit=dlimit
+
+     ;----Edge data cut:
+      time_clip,'iug_mu_iono_pwr1', init_time[0], init_time[1], newname = 'iug_mu_iono_pwr1'
       options,'iug_mu_iono_pwr1',ytitle='MU-iono!CHeight!C[km]',ztitle='pwr1!C[dB]'
       options,'iug_mu_iono_pwr1',spec=1
+     
       store_data,'iug_mu_iono_pwr2',data={x:site_time, y:pwr2_app,v:height[*,1]},dlimit=dlimit
+
+     ;----Edge data cut:
+      time_clip,'iug_mu_iono_pwr2', init_time[0], init_time[1], newname = 'iug_mu_iono_pwr2'     
       options,'iug_mu_iono_pwr2',ytitle='MU-iono!CHeight!C[km]',ztitle='pwr2!C[dB]'
       options,'iug_mu_iono_pwr2',spec=1
+     
       store_data,'iug_mu_iono_pwr3',data={x:site_time, y:pwr3_app,v:height[*,2]},dlimit=dlimit
+
+     ;----Edge data cut:
+      time_clip,'iug_mu_iono_pwr3', init_time[0], init_time[1], newname = 'iug_mu_iono_pwr3'     
       options,'iug_mu_iono_pwr3',ytitle='MU-iono!CHeight!C[km]',ztitle='pwr3!C[dB]'
       options,'iug_mu_iono_pwr3',spec=1
+     
       store_data,'iug_mu_iono_pwr4',data={x:site_time, y:pwr4_app,v:height[*,3]},dlimit=dlimit
+
+     ;----Edge data cut:
+      time_clip,'iug_mu_iono_pwr4', init_time[0], init_time[1], newname = 'iug_mu_iono_pwr4'     
       options,'iug_mu_iono_pwr4',ytitle='MU-iono!CHeight!C[km]',ztitle='pwr4!C[dB]'
       options,'iug_mu_iono_pwr4',spec=1      
    

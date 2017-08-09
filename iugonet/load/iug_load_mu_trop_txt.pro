@@ -35,6 +35,7 @@
 ; A. Shinbori, 19/12/2012.
 ; A. Shinbori, 27/07/2013.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 09/08/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -93,12 +94,17 @@ height_zm=strsplit('1.998,2.145,2.293,2.441,2.589,2.736,2.884,3.032,3.179,3.327,
 ;---Data list which applies the above height data:
 f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 9.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -240,6 +246,13 @@ for ii=0L,n_elements(parameters)-1 do begin
          mu_data=0 
       endfor
 
+     ;==============================================================
+     ;Change time window associated with a time shift from UT to LT:
+     ;==============================================================
+      get_timespan, time
+      timespan, time[0] + 3600.0d * 9.0d, day_org
+      get_timespan, init_time
+
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
@@ -260,6 +273,9 @@ for ii=0L,n_elements(parameters)-1 do begin
         ;---Create tplot variables for each parameter:
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
          store_data,'iug_mu_trop_'+parameters[ii],data={x:mu_time2, y:mu_data2, v:altitude},dlimit=dlimit
+
+        ;----Edge data cut:
+         time_clip,'iug_mu_trop_'+parameters[ii], init_time[0], init_time[1], newname = 'iug_mu_trop_'+parameters[ii]
         
         ;---Add options
          new_vars=tnames('iug_mu_trop_*')

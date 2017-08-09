@@ -31,6 +31,7 @@
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 09/08/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -61,12 +62,17 @@ levels = ssl_check_valid_name(level, level_all, /ignore_case, /include_all)
 
 print, levels
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 9.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -233,6 +239,13 @@ for ii=0L, n_elements(levels)-1 do begin
          ncdf_close,cdfid  ; done  
       endfor
 
+     ;==============================================================
+     ;Change time window associated with a time shift from UT to LT:
+     ;==============================================================
+      get_timespan, time
+      timespan, time[0] + 3600.0d * 9.0d, day_org
+      get_timespan, init_time
+
       if n_elements(mu_time) gt 1 then begin
         ;---Definition of arrary names
          height = fltarr(n_elements(range),n_elements(beam))
@@ -277,7 +290,10 @@ for ii=0L, n_elements(levels)-1 do begin
                
               ;---Create tplot variable for echo power (beam 1-5): 
                store_data,'iug_mu_meso_pwr'+bname[l]+'_'+levels[ii],data={x:mu_time, y:pwr2_mu, v:height[*,l]},dlimit=dlimit
-              
+
+              ;----Edge data cut:
+               time_clip,'iug_mu_meso_pwr'+bname[l]+'_'+levels[ii], init_time[0], init_time[1], newname = 'iug_mu_meso_pwr'+bname[l]+'_'+levels[ii]
+                             
               ;---Add options;
                new_vars=tnames('iug_mu_meso_pwr*')
                if new_vars[0] ne '' then begin
@@ -292,6 +308,9 @@ for ii=0L, n_elements(levels)-1 do begin
                
               ;---Create tplot variable for spectral width (beam 1-5):
                store_data,'iug_mu_meso_wdt'+bname[l]+'_'+levels[ii],data={x:mu_time, y:wdt2_mu, v:height[*,l]},dlimit=dlimit
+
+              ;----Edge data cut:
+               time_clip,'iug_mu_meso_wdt'+bname[l]+'_'+levels[ii], init_time[0], init_time[1], newname = 'iug_mu_meso_wdt'+bname[l]+'_'+levels[ii]
                
               ;---Add options;
                new_vars=tnames('iug_mu_meso_wdt*')
@@ -307,6 +326,9 @@ for ii=0L, n_elements(levels)-1 do begin
                
               ;---Create tplot variable for Doppler velocity (beam 1-5):            
                store_data,'iug_mu_meso_dpl'+bname[l]+'_'+levels[ii],data={x:mu_time, y:dpl2_mu, v:height[*,l]},dlimit=dlimit
+
+              ;----Edge data cut:
+               time_clip,'iug_mu_meso_dpl'+bname[l]+'_'+levels[ii], init_time[0], init_time[1], newname = 'iug_mu_meso_dpl'+bname[l]+'_'+levels[ii]
               
               ;---Add options; 
                new_vars=tnames('iug_mu_meso_dpl*')
@@ -320,6 +342,9 @@ for ii=0L, n_elements(levels)-1 do begin
                
               ;---Create tplot variable for noise level (beam 1-5):
                store_data,'iug_mu_meso_pn'+bname[l]+'_'+levels[ii],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
+
+              ;----Edge data cut:
+               time_clip,'iug_mu_meso_pn'+bname[l]+'_'+levels[ii], init_time[0], init_time[1], newname = 'iug_mu_meso_pn'+bname[l]+'_'+levels[ii]
               
               ;---Add options;
                new_vars=tnames('iug_mu_meso_pn*')

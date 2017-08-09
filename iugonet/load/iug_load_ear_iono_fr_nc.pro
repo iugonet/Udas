@@ -39,6 +39,7 @@
 ; A. Shinbori, 17/12/2012.
 ; A. Shinbori, 18/08/2013.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 08/08/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -80,12 +81,17 @@ print, parameters
 ;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 7.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -277,6 +283,13 @@ for ii=0L,n_elements(parameters)-1 do begin
          append_array, snr1, snr1_ear
       endfor
 
+     ;==============================================================
+     ;Change time window associated with a time shift from UT to LT:
+     ;==============================================================
+      get_timespan, time
+      timespan, time[0] + 3600.0d * 7.0d, day_org
+      get_timespan, init_time
+
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
@@ -315,6 +328,9 @@ for ii=0L,n_elements(parameters)-1 do begin
               
               ;---Create tplot variable for echo power: 
                store_data,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
+
+              ;----Edge data cut:
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l]
       
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pwr'+bname[l])
@@ -331,6 +347,9 @@ for ii=0L,n_elements(parameters)-1 do begin
                
               ;---Create tplot variable for spectral width: 
                store_data,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
+
+               ;----Edge data cut:
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_wdt'+bname[l])
@@ -347,6 +366,9 @@ for ii=0L,n_elements(parameters)-1 do begin
               
               ;---Create tplot variable for Doppler velocity:
                store_data,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
+
+               ;----Edge data cut:
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_dpl'+bname[l])
@@ -363,6 +385,9 @@ for ii=0L,n_elements(parameters)-1 do begin
               
               ;---Create tplot variable for singal to noise ratio:
                store_data,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],data={x:ear_time, y:snr2_ear, v:height2},dlimit=dlimit
+
+               ;----Edge data cut:
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_snr'+bname[l])
@@ -377,6 +402,9 @@ for ii=0L,n_elements(parameters)-1 do begin
                
               ;---Create tplot variable for noise level:
                store_data,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
+
+              ;----Edge data cut:
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pn'+bname[l])

@@ -43,6 +43,7 @@
 ; A. Shinbori, 01/08/2013.
 ; A. Shinbori, 18/08/2013.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 08/08/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -94,12 +95,17 @@ print, parameters2
 ;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 7.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -231,6 +237,13 @@ for ii=0L,n_elements(parameters)-1 do begin
             free_lun,lun  
          endfor
 
+        ;==============================================================
+        ;Change time window associated with a time shift from UT to LT:
+        ;==============================================================
+         get_timespan, time
+         timespan, time[0] + 3600.0d * 7.0d, day_org
+         get_timespan, init_time
+
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================
@@ -252,6 +265,9 @@ for ii=0L,n_elements(parameters)-1 do begin
            ;---Create tplot variables for each parameter:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'M. Yamamoto'))
             store_data,'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii],data={x:ear_time, y:ear_data, v:altitude},dlimit=dlimit
+
+           ;----Edge data cut:
+            time_clip, 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_'+parameters2[iii]
            
            ;---Add options
             new_vars=tnames('iug_ear_fai'+parameters[ii]+'_'+parameters2[iii])

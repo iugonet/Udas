@@ -36,6 +36,7 @@
 ; A. Shinbori, 24/12/2012.
 ; A. Shinbori, 15/04/2013.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 09/08/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -84,12 +85,17 @@ for i=0L, n_elements(site_data_dir)-1 do begin
    site_data_lastmane[i]=parameters[i]
 endfor
 
-;******************************************************************
-;Loop on downloading files
-;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-;
+;**************************
+;Loop on downloading files:
+;**************************
+;==============================================================
+;Change time window associated with a time shift from UT to LT:
+;==============================================================
+get_timespan, init_time
+day_org = (init_time[1] - init_time[0])/86400.d
+day = day_org + 1
+timespan, init_time[0] - 3600.0d * 9.0d, day
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -287,6 +293,13 @@ for iii=0L,n_elements(parameters)-1 do begin
          height[g]=float(70+g*dh) 
       endfor
 
+     ;==============================================================
+     ;Change time window associated with a time shift from UT to LT:
+     ;==============================================================
+      get_timespan, time
+      timespan, time[0] + 3600.0d * 9.0d, day_org
+      get_timespan, init_time
+
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
@@ -304,22 +317,37 @@ for iii=0L,n_elements(parameters)-1 do begin
         ;---Create tplot variable and add options for zonal wind:
          dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))
          store_data,'iug_mu_meteor_uwnd_'+parameters[iii],data={x:site_time, y:zon_wind2, v:height},dlimit=dlimit
+
+        ;----Edge data cut:
+         time_clip,'iug_mu_meteor_uwnd_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_mu_meteor_uwnd_'+parameters[iii]
          options,'iug_mu_meteor_uwnd_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='uwnd!C[m/s]'
          
         ;---Create tplot variable and add options for meridional wind:
          store_data,'iug_mu_meteor_vwnd_'+parameters[iii],data={x:site_time, y:mer_wind2, v:height},dlimit=dlimit
+
+        ;----Edge data cut:
+         time_clip,'iug_mu_meteor_vwnd_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_mu_meteor_vwnd_'+parameters[iii]
          options,'iug_mu_meteor_vwnd_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='vwnd!C[m/s]'
          
         ;---Create tplot variable and add options for standard deviation of zonal wind:
          store_data,'iug_mu_meteor_uwndsig_'+parameters[iii],data={x:site_time, y:zon_thermal2, v:height},dlimit=dlimit
+
+        ;----Edge data cut:
+         time_clip,'iug_mu_meteor_uwndsig_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_mu_meteor_uwndsig_'+parameters[iii]
          options,'iug_mu_meteor_uwndsig_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='uwndsig!C[m/s]'
         
         ;---Create tplot variable and add options for standard deviation of meridional wind:
          store_data,'iug_mu_meteor_vwndsig_'+parameters[iii],data={x:site_time, y:mer_thermal2, v:height},dlimit=dlimit
+  
+        ;----Edge data cut:
+         time_clip,'iug_mu_meteor_vwndsig_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_mu_meteor_vwndsig_'+parameters[iii]
          options,'iug_mu_meteor_vwndsig_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='vwndsig!C[m/s]'
          
         ;---Create tplot variable and add options for meteor echoes:
          store_data,'iug_mu_meteor_mwnum_'+parameters[iii],data={x:site_time, y:meteor_num2, v:height},dlimit=dlimit
+         
+        ;----Edge data cut:
+         time_clip,'iug_mu_meteor_mwnum_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_mu_meteor_mwnum_'+parameters[iii] 
          options,'iug_mu_meteor_mwnum_'+parameters[iii],ytitle='MU-meteor!CHeight!C[km]',ztitle='mwnum'
 
         ;---Add options
