@@ -38,11 +38,10 @@ pro iug_load_avon_vlfb, site=site, parameter=parameter, $
          downloadonly=downloadonly, no_download=no_download, verbose=verbose, trange=trange, force=force
 
 ;--- site
-site_code_all = strsplit('tnn srb ptk lbs', /extract)
+site_code_all = strsplit('tnn srb ptk lbs hni', /extract)
 if(n_elements(site) eq 0) then site='all'
-site=strjoin(site, ' ')
-site=strsplit(strlowcase(site), ' ', /extract)
-site_code=ssl_check_valid_name(site, site_code_all, /include_all)
+site_code=ssl_check_valid_name(site, site_code_all, /ignore_case, /include_all)
+if site_code[0] eq '' then return
 
 ;--- parameter
 param_all = strsplit('ch1 ch2', /extract)
