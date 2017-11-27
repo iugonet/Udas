@@ -1,5 +1,5 @@
 ;+
-; PROCEDURE: iug_load_gmag_stel_induction
+; PROCEDURE: iug_load_gmag_isee_induction
 ;
 ; PURPOSE:
 ;   To load ISEE induction magnetometer data from the ISEE ERG-SC site 
@@ -18,7 +18,7 @@
 ;   For more information, see http://stdb2.stelab.nagoya-u.ac.jp/magne/
 ;
 ; KEYWORDS:
-;   site  = Observatory name, example, iug_load_gmag_stel_induction, site='msr',
+;   site  = Observatory name, example, iug_load_gmag_isee_induction, site='msr',
 ;           the default is 'all', i.e., load all available stations.
 ;           This can be an array of strings, e.g., ['msr', 'sta']
 ;           or a single string delimited by spaces, e.g., 'msr sta'.
@@ -32,13 +32,13 @@
 ;   /time_pulse, get time pulse
 ;
 ; EXAMPLE:
-;   iug_load_gmag_stel_induction, site='msr sta', $
+;   iug_load_gmag_isee_induction, site='msr sta', $
 ;         trange=['2008-02-28/00:00:00','2008-02-28/02:00:00']
 ;
 ; Written by: Y.-M Tanaka, Apr 12, 2013 (ytanaka at nipr.ac.jp)
 ;-
 
-pro iug_load_gmag_stel_induction, site=site, $
+pro iug_load_gmag_isee_induction, site=site, $
         downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
         trange=trange, timeclip=timeclip, $
         frequency_dependent=frequency_dependent, time_pulse=time_pulse
