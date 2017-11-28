@@ -185,9 +185,9 @@ pro iug_ui_load_data_load_pro,    $
                   erg_load_gmag_mm210, trange = timeRange, site = site_or_param, datatype = parameters 
                   par_names=tnames('mm210_mag_*')
               end
-              'STEL#' : begin
-                  erg_load_gmag_stel_fluxgate, trange = timeRange, site = site_or_param, datatype = parameters 
-                  par_names=tnames('stel_fluxgate_mag_*')
+              'ISEE#' : begin
+                  erg_load_gmag_isee_fluxgate, trange = timeRange, site = site_or_param, datatype = parameters 
+                  par_names=tnames('isee_fluxgate_mag_*')
               end
               'WDC_kyoto' : begin
                   if parameters[0] eq '*' then begin
@@ -219,9 +219,9 @@ pro iug_ui_load_data_load_pro,    $
                       iug_load_gmag_nipr_induction, trange=timeRange, site = site_or_param
                       par_names=tnames('nipr_imag_*')
                   end
-                  'STEL#' : begin
-                      erg_load_gmag_stel_induction, trange = timeRange, site = site_or_param
-                      par_names=tnames('stel_induction_*')
+                  'ISEE#' : begin
+                      erg_load_gmag_isee_induction, trange = timeRange, site = site_or_param
+                      par_names=tnames('isee_induction_*')
                   end
               endcase
           endelse
@@ -435,10 +435,10 @@ pro iug_ui_load_data_load_pro,    $
                   (instrument eq 'EISCAT_radar') or (instrument eq 'HF_Solar_Jupiter_radio_spectrometer') then begin
                   site_name2 = site_name[1]
               endif else if (instrument eq 'geomagnetic_field_fluxgate') and $
-                  (datatype eq 'STEL#') then begin
+                  (datatype eq 'ISEE#') then begin
                   site_name2 = site_name[3]
               endif else if (instrument eq 'geomagnetic_field_induction') and $
-                  (datatype eq 'STEL#') then begin
+                  (datatype eq 'ISEE#') then begin
                   site_name2 = site_name[4]
               endif else if (instrument eq 'Middle_Upper_atomosphere_radar') then begin
                   if n_elements(site_name) eq 5 then begin 
