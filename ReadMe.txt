@@ -1,6 +1,6 @@
 ==================================================================
-; UDAS plug-in software package for spedas_2_00 (UDAS ver.s2.00.1)
-;                                                    July 31, 2017
+; UDAS plug-in software package for spedas_2_10 (UDAS ver.s2.10.1)
+;                                                    Nov. 30, 2017
 ==================================================================
 
   UDAS is a plug-in software package for SPEDAS (Space Physics Environment 
@@ -50,10 +50,10 @@ Load procedures for IUGONET data:
 - iug_load_gmag_magdas_1sec ; Alias for "erg_load_gmag_magdas_1sec"
 - iug_load_gmag_mm210   ; Alias for "erg_load_gmag_mm210"
 - iug_load_gmag_nipr    ; Fluxgate magnetometer data from NIPR
-- iug_load_gmag_stel_fluxgate ; Alias for "erg_load_gmag_stel_fluxgate"
+- iug_load_gmag_isee_fluxgate ; Alias for "erg_load_gmag_isee_fluxgate"
 - iug_load_gmag_wdc     ; WDC geomagnetic indices and the magnetometer data
 - iug_load_gmag_nipr_induction ; Induction magnetometer data from NIPR
-- iug_load_gmag_stel_induction ; Alias for "erg_load_gmag_stel_induction"
+- iug_load_gmag_isee_induction ; Alias for "erg_load_gmag_isee_induction"
 - iug_load_gps_ro_rish  ; GPS radio occultation full spectral inversion data from RISH, Kyoto Univ
 - iug_load_hf_tohokuu   ; Jupiter's/solar wide band spectral data in HF-band
 - iug_load_ionosonde_rish ; Ionogram data taken by the ionosonde at Shigaraki
@@ -106,7 +106,7 @@ CUI:
   timespan,'2008-03-20' & iug_load_gmag_serc, site='anc'
   timespan,'2006-12-01',31 & iug_load_gmag_wdc, site='sym'
   timespan,'2006-04-17' & iug_load_gmag_nipr_induction, site='syo'
-  timespan,'2008-02-28',1,/hour & iug_load_gmag_stel_induction, site='ath'
+  timespan,'2008-02-28',1,/hour & iug_load_gmag_isee_induction, site='ath'
   timespan,'2004-01-09/22:00',1,/hour & iug_load_hf_tohokuu
   timespan,'2002-07-01',1,/hour & iug_load_ionosonde_rish
   timespan,'2010-11-01',5,/hour & iug_load_iprt
@@ -139,11 +139,11 @@ GUI:
                         f_region        fb1p16a         *       2001-08-05
 - geomag._fluxgate      magdas#         onw             *       2010-01-24
                         210mm#          tik             *       2006-12-01
-                        STEL#           msr             *       2006-11-20
+                        ISEE#           msr             *       2006-11-20
                         WDC_kyoto       kak             *       2006-12-01
                         NIPR#           syo             *       2003-03-25
 - geomag._induction     NIPR#           syo             *       2006-04-17
-                        STEL#           ath             *       2008-02-28
+                        ISEE#           ath             *       2008-02-28
 - geomag._index         Dst_index       WDC_kyoto       *       2006-12-01
                         AE_index        WDC_kyoto       *       2006-12-01
                         ASY_index       WDC_kyoto       *       2006-12-01
@@ -178,7 +178,7 @@ center (ERG-SC) at Institute for Space-Earth Environmental Research
 (ISEE), Nagoya University, in collaboration with SuperDARN PI groups.
 For use of the SuperDARN data, it is highly recommended to install 
 the latest ERG-SC plug-in libraries which are available from
-https://ergsc.isee.nagoya-u.ac.jp/analysis/spedas/index.shtml.en/. 
+https://ergsc.isee.nagoya-u.ac.jp/analysis/spedas/index.shtml.en 
 As for questions about the data and the plug-in package, please feel 
 freeto contact the ERG-SC office (E-mail: erg-sc-core at 
 isee.nagoya-u.ac.jp).
@@ -192,7 +192,7 @@ the GRENE Arctic Climate Change Research Project.
 
 3. You can get useful information of our data (ex., data availability, 
 contact person, access URL, etc...) at the IUGONET metadata database 
-(IUGONET Type-A): http://search.iugonet.org/.
+(IUGONET Type-A): http://search.iugonet.org/
 
 4. For some kinds of data, it may be difficult to load more than one 
 week by using GUI due to the memory problem.
