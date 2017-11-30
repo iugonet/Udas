@@ -29,7 +29,8 @@
 ;  A. Shinbori, 08/04/2013.
 ;  A. Shinbori, 24/01/2014.
 ;  A. Shinbori, 08/08/2017.
-;    
+;  A. Shinbori, 29/11/2017.
+;      
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
 ; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
@@ -76,9 +77,7 @@ site_data_dir = strsplit('bik/aws/ ktb/aws/ mnd/aws/ pon/aws/',' ', /extract)
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
+get_timespan, time_org
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
@@ -101,10 +100,10 @@ if n_elements(site_code) le n_elements(site_data_dir) then begin
          'pon':n_site[i] = 3 
       endcase
       case site_code[i] of
-        'bik':time_shift[i] = 9
-        'ktb':time_shift[i] = 7
-        'mnd':time_shift[i] = 8
-        'pon':time_shift[i] = 7
+        'bik':time_shift[i] = 9.0d
+        'ktb':time_shift[i] = 7.0d
+        'mnd':time_shift[i] = 8.0d
+        'pon':time_shift[i] = 7.0d
       endcase
    endfor
 endif
@@ -121,8 +120,10 @@ for ii=0L,h_max-1 do begin
       endcase
      ;==============================================================
      ;Change time window associated with a time shift from UT to LT:
-     ;==============================================================      
-      timespan, init_time[0] - 3600.0d * time_shift[ii], day
+     ;==============================================================
+      day_org = (time_org[1] - time_org[0])/86400.d
+      day_mod = day_org + 1
+      timespan, time_org[0] - 3600.0d * time_shift[ii], day_mod
 
      ;****************************
      ;Get files for ith component:
@@ -205,7 +206,7 @@ for ii=0L,h_max-1 do begin
               data_arr = strsplit(s,',',/extract)
        
              ;---Convert time from LT to UT
-              time = time_double(string(data_arr[0])+'/'+string(data_arr[1])) $
+              aws_time = time_double(string(data_arr[0])+'/'+string(data_arr[1])) $
                      -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(time_zone)+':'+string(0)+':'+string(0))
 
              ;---Substitute each parameter: 
@@ -284,7 +285,7 @@ for ii=0L,h_max-1 do begin
              ;=====================================
              ;Append data of time and observations:
              ;=====================================
-              append_array, aws_time, time
+              append_array, aws_time_app, aws_time
               append_array, aws_press,press
               append_array, aws_precipi,precipi
               append_array, aws_rh,   rh
@@ -299,10 +300,10 @@ for ii=0L,h_max-1 do begin
 
        ;==============================================================
        ;Change time window associated with a time shift from UT to LT:
-       ;==============================================================       
-        get_timespan, time
-        timespan, time[0] + 3600.0d * time_shift[ii], day_org  
-        get_timespan, init_time
+       ;==============================================================
+         timespan, time_org
+         get_timespan, init_time2
+       
        ;==============================
        ;Store data in TPLOT variables:
        ;==============================
@@ -318,22 +319,22 @@ for ii=0L,h_max-1 do begin
        if size(aws_press,/type) eq 4 then begin 
          ;---Create tplot variables
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))            
-          store_data,'iug_aws_'+site_code[ii]+'_press',data={x:aws_time, y:aws_press},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_precipi',data={x:aws_time, y:aws_precipi},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_rh',data={x:aws_time, y:aws_rh},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_sr',data={x:aws_time, y:aws_sr},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_temp',data={x:aws_time, y:aws_temp},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_wnddir',data={x:aws_time, y:aws_wnddir},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_wndspd',data={x:aws_time, y:aws_wndspd},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_press',data={x:aws_time_app, y:aws_press},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_precipi',data={x:aws_time_app, y:aws_precipi},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_rh',data={x:aws_time_app, y:aws_rh},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_sr',data={x:aws_time_app, y:aws_sr},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_temp',data={x:aws_time_app, y:aws_temp},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_wnddir',data={x:aws_time_app, y:aws_wnddir},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_wndspd',data={x:aws_time_app, y:aws_wndspd},dlimit=dlimit
          
          ;----Edge data cut: 
-          time_clip, 'iug_aws_'+site_code[ii]+'_press', init_time[0], init_time[1], newname = 'iug_aws_'+site_code[ii]+'_press' 
-          time_clip, 'iug_aws_'+site_code[ii]+'_precipi', init_time[0], init_time[1], newname = 'iug_aws_'+site_code[ii]+'_precipi'
-          time_clip, 'iug_aws_'+site_code[ii]+'_rh', init_time[0], init_time[1], newname = 'iug_aws_'+site_code[ii]+'_rh'
-          time_clip, 'iug_aws_'+site_code[ii]+'_sr', init_time[0], init_time[1], newname = 'iug_aws_'+site_code[ii]+'_sr'
-          time_clip, 'iug_aws_'+site_code[ii]+'_temp', init_time[0], init_time[1], newname = 'iug_aws_'+site_code[ii]+'_temp'
-          time_clip, 'iug_aws_'+site_code[ii]+'_wnddir', init_time[0], init_time[1], newname = 'iug_aws_'+site_code[ii]+'_wnddir'
-          time_clip, 'iug_aws_'+site_code[ii]+'_wndspd', init_time[0], init_time[1], newname = 'iug_aws_'+site_code[ii]+'_wndspd'
+          time_clip, 'iug_aws_'+site_code[ii]+'_press', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_press' 
+          time_clip, 'iug_aws_'+site_code[ii]+'_precipi', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_precipi'
+          time_clip, 'iug_aws_'+site_code[ii]+'_rh', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_rh'
+          time_clip, 'iug_aws_'+site_code[ii]+'_sr', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_sr'
+          time_clip, 'iug_aws_'+site_code[ii]+'_temp', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_temp'
+          time_clip, 'iug_aws_'+site_code[ii]+'_wnddir', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_wnddir'
+          time_clip, 'iug_aws_'+site_code[ii]+'_wndspd', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_wndspd'
     
          ;---Options of each tplot variable
           new_vars=tnames('iug_aws_'+site_code[ii]+'_press')
@@ -349,7 +350,7 @@ for ii=0L,h_max-1 do begin
        endif
      
       ;---Clear time and data buffer:
-       aws_time = 0
+       aws_time_app = 0
        aws_press = 0
        aws_sr = 0
        aws_rh = 0
@@ -370,6 +371,8 @@ for ii=0L,h_max-1 do begin
        endif
     endif
    jj=n_elements(local_paths)
+  ;---Initialization of timespan for sites:
+   timespan, time_org
 endfor 
 
 new_vars=tnames('iug_aws_*')

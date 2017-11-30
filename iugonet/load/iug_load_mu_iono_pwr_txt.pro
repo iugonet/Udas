@@ -32,6 +32,7 @@
 ; A. Shinbori, 24/12/2012.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 09/08/2017.
+; A. Shinbori, 30/11/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -65,13 +66,8 @@ print, parameters
 ;**************************
 ;Loop on downloading files:
 ;**************************
-;==============================================================
-;Change time window associated with a time shift from UT to LT:
-;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+
+get_timespan, time_org
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
@@ -79,8 +75,15 @@ timespan, init_time[0] - 3600.0d * 9.0d, day
 h=0L
 site_time=0
 jj=0L
-for ii=0L,n_elements(parameters)-1 do begin   
-   if ~size(fns,/type) then begin 
+for ii=0L,n_elements(parameters)-1 do begin  
+  ;==============================================================
+  ;Change time window associated with a time shift from UT to LT:
+  ;==============================================================
+   day_org = (time_org[1] - time_org[0])/86400.d
+   day_mod = day_org + 1
+   timespan, time_org[0] - 3600.0d * 9.0d, day_mod
+  
+  if ~size(fns,/type) then begin 
      ;****************************
      ;Get files for ith component:
      ;****************************       
@@ -183,9 +186,8 @@ for ii=0L,n_elements(parameters)-1 do begin
      ;==============================================================
      ;Change time window associated with a time shift from UT to LT:
      ;==============================================================
-      get_timespan, time
-      timespan, time[0] + 3600.0d * 9.0d, day_org
-      get_timespan, init_time
+      timespan, time_org
+      get_timespan, init_time2
       
      ;==============================
      ;Store data in TPLOT variables:
@@ -206,7 +208,7 @@ for ii=0L,n_elements(parameters)-1 do begin
          store_data,'iug_mu_iono_'+parameters[ii],data={x:site_time, y:pwr_app,v:height},dlimit=dlimit
       
         ;----Edge data cut:
-         time_clip,'iug_mu_iono_'+parameters[ii], init_time[0], init_time[1], newname = 'iug_mu_iono_'+parameters[ii]     
+         time_clip,'iug_mu_iono_'+parameters[ii], init_time2[0], init_time2[1], newname = 'iug_mu_iono_'+parameters[ii]     
          options,'iug_mu_iono_'+parameters[ii],ytitle='MU-iono!CHeight!C[km]',ztitle= parameters[ii]+'!C[dB]'
          options,'iug_mu_iono_'+parameters[ii],spec=1
       
@@ -219,6 +221,8 @@ for ii=0L,n_elements(parameters)-1 do begin
       pwr_app=0
    endif
    jj=n_elements(local_paths)
+  ;---Initialization of timespan for parameters:
+   timespan, time_org
 endfor
 
 new_vars=tnames('iug_mu_iono_pwr*')

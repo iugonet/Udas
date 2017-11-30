@@ -40,6 +40,7 @@
 ; A. Shinbori, 18/08/2013.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 08/08/2017.
+; A. Shinbori, 29/11/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -84,19 +85,21 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;**************************
 ;Loop on downloading files:
 ;**************************
-;==============================================================
-;Change time window associated with a time shift from UT to LT:
-;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 7.0d, day
+
+get_timespan, time_org
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 jj=0L
 for ii=0L,n_elements(parameters)-1 do begin
+  ;==============================================================
+  ;Change time window associated with a time shift from UT to LT:
+  ;==============================================================
+   day_org = (time_org[1] - time_org[0])/86400.d
+   day_mod = day_org + 1
+   timespan, time_org[0] - 3600.0d * 7.0d, day_mod
+
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -286,9 +289,8 @@ for ii=0L,n_elements(parameters)-1 do begin
      ;==============================================================
      ;Change time window associated with a time shift from UT to LT:
      ;==============================================================
-      get_timespan, time
-      timespan, time[0] + 3600.0d * 7.0d, day_org
-      get_timespan, init_time
+      timespan, time_org
+      get_timespan, init_time2
 
      ;==============================
      ;Store data in TPLOT variables:
@@ -330,7 +332,7 @@ for ii=0L,n_elements(parameters)-1 do begin
                store_data,'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
 
               ;----Edge data cut:
-               time_clip, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l]
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_fai'+parameters[ii]+'_pwr'+bname[l]
       
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pwr'+bname[l])
@@ -349,7 +351,7 @@ for ii=0L,n_elements(parameters)-1 do begin
                store_data,'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
 
                ;----Edge data cut:
-               time_clip, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l]
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_fai'+parameters[ii]+'_wdt'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_wdt'+bname[l])
@@ -368,7 +370,7 @@ for ii=0L,n_elements(parameters)-1 do begin
                store_data,'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
 
                ;----Edge data cut:
-               time_clip, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l]
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_fai'+parameters[ii]+'_dpl'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_dpl'+bname[l])
@@ -387,7 +389,7 @@ for ii=0L,n_elements(parameters)-1 do begin
                store_data,'iug_ear_fai'+parameters[ii]+'_snr'+bname[l],data={x:ear_time, y:snr2_ear, v:height2},dlimit=dlimit
 
                ;----Edge data cut:
-               time_clip, 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l]
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_fai'+parameters[ii]+'_snr'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_snr'+bname[l])
@@ -404,7 +406,7 @@ for ii=0L,n_elements(parameters)-1 do begin
                store_data,'iug_ear_fai'+parameters[ii]+'_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
 
               ;----Edge data cut:
-               time_clip, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l]
+               time_clip, 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_fai'+parameters[ii]+'_pn'+bname[l]
               
               ;---Add options and tdegap:
                new_vars=tnames('iug_ear_fai'+parameters[ii]+'_pn'+bname[l])
@@ -434,6 +436,8 @@ for ii=0L,n_elements(parameters)-1 do begin
    snr1 = 0
    
    jj=n_elements(local_paths)
+  ;---Initialization of timespan for parameters-1:
+   timespan, time_org
 endfor
 
 ;*************************

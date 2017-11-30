@@ -38,6 +38,7 @@
 ; A. Shinbori, 08/04/2013.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 09/08/2017.
+; A. Shinbori, 30/11/2017.
 ;   
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -102,12 +103,8 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;**************************
 ;Loop on downloading files:
 ;**************************
-;==============================================================
-;Change time window associated with a time shift from UT to LT:
-;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
+
+get_timespan, time_org
 
 ;Definition of parameter
 jj=0L
@@ -128,10 +125,10 @@ if n_elements(site_code) le n_elements(site_data_dir) then begin
          'sgk':n_site[i]=3 
       endcase
       case site_code[i] of
-        'bik':time_shift[i] = 9
-        'mnd':time_shift[i] = 8
-        'pon':time_shift[i] = 7
-        'sgk':time_shift[i] = 9
+        'bik':time_shift[i] = 9.0d
+        'mnd':time_shift[i] = 8.0d
+        'pon':time_shift[i] = 7.0d
+        'sgk':time_shift[i] = 9.0d
       endcase
    endfor
 endif
@@ -139,6 +136,14 @@ endif
 for ii=0L,h_max-1 do begin
    k=n_site[ii]
    for iii=0,n_elements(parameters)-1 do begin
+    
+     ;==============================================================
+     ;Change time window associated with a time shift from UT to LT:
+     ;==============================================================
+      day_org = (time_org[1] - time_org[0])/86400.d
+      day_mod = day_org + 1
+      timespan, time_org[0] - 3600.0d * time_shift[ii], day_mod
+      
       if ~size(fns,/type) then begin
         ;Definition of blr site names:
          case site_code[ii] of
@@ -147,11 +152,6 @@ for ii=0L,h_max-1 do begin
             'pon':site_code2='pontianak'
             'sgk':site_code2='shigaraki'
          endcase
-
-        ;==============================================================
-        ;Change time window associated with a time shift from UT to LT:
-        ;==============================================================
-         timespan, init_time[0] - 3600.0d * time_shift[ii], day
          
         ;****************************
         ;Get files for ith component:
@@ -288,9 +288,8 @@ for ii=0L,h_max-1 do begin
         ;==============================================================
         ;Change time window associated with a time shift from UT to LT:
         ;==============================================================
-         get_timespan, time
-         timespan, time[0] + 3600.0d * time_shift[ii], day_org
-         get_timespan, init_time
+         timespan, time_org
+         get_timespan, init_time2
    
         ;==============================
         ;Store data in TPLOT variables:
@@ -328,7 +327,7 @@ for ii=0L,h_max-1 do begin
             store_data,'iug_wpr_'+site_code[ii]+'_'+parameters[iii],data={x:wpr_time, y:wpr_data, v:altitude},dlimit=dlimit
 
            ;----Edge data cut:
-            time_clip, 'iug_wpr_'+site_code[ii]+'_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_wpr_'+site_code[ii]+'_'+parameters[iii]
+            time_clip, 'iug_wpr_'+site_code[ii]+'_'+parameters[iii], init_time2[0], init_time2[1], newname = 'iug_wpr_'+site_code[ii]+'_'+parameters[iii]
            
            ;---Options of each tplot variable 
             new_vars=tnames('iug_wpr_'+site_code[ii]+'_'+parameters[iii])
@@ -351,8 +350,12 @@ for ii=0L,h_max-1 do begin
          endif
       endif
       jj=n_elements(local_paths)
+     ;---Initialization of timespan for sites
+      timespan, time_org
    endfor
    jj=n_elements(local_paths)
+  ;---Initialization of timespan for sites
+   timespan, time_org
 endfor
 
 new_vars=tnames('iug_wpr_*')

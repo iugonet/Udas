@@ -28,6 +28,7 @@
 ; A. Shinbori, 27/07/2013.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 09/08/2017.
+; A. Shinbori, 30/11/2017.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -73,10 +74,10 @@ f_list=['19860317','19860318','19860319','19860320','19860321','19910209']
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+get_timespan, time_org
+day_org = (time_org[1] - time_org[0])/86400.d
+day_mod = day_org + 1
+timespan, time_org[0] - 3600.0d * 9.0d, day_mod
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
@@ -304,9 +305,8 @@ if (downloadonly eq 0) then begin
   ;==============================================================
   ;Change time window associated with a time shift from UT to LT:
   ;==============================================================
-   get_timespan, time
-   timespan, time[0] + 3600.0d * 9.0d, day_org
-   get_timespan, init_time
+   timespan, time_org
+   get_timespan, init_time2
 
    if n_elements(mu_time) gt 1 then begin
      ;---Definition of arrary names
@@ -337,7 +337,7 @@ if (downloadonly eq 0) then begin
          store_data,'iug_mu_trop_uwnd',data={x:mu_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip,'iug_mu_trop_uwnd', init_time[0], init_time[1], newname = 'iug_mu_trop_uwnd'
+         time_clip,'iug_mu_trop_uwnd', init_time2[0], init_time2[1], newname = 'iug_mu_trop_uwnd'
          
         ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_uwnd')
@@ -351,7 +351,7 @@ if (downloadonly eq 0) then begin
          store_data,'iug_mu_trop_vwnd',data={x:mu_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip,'iug_mu_trop_vwnd', init_time[0], init_time[1], newname = 'iug_mu_trop_vwnd'
+         time_clip,'iug_mu_trop_vwnd', init_time2[0], init_time2[1], newname = 'iug_mu_trop_vwnd'
         
         ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_vwnd')
@@ -365,7 +365,7 @@ if (downloadonly eq 0) then begin
          store_data,'iug_mu_trop_wwnd',data={x:mu_time, y:ver_wind, v:height_vw},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip,'iug_mu_trop_wwnd', init_time[0], init_time[1], newname = 'iug_mu_trop_wwnd'
+         time_clip,'iug_mu_trop_wwnd', init_time2[0], init_time2[1], newname = 'iug_mu_trop_wwnd'
         
         ;---Add options and tdegap:
          new_vars=tnames('iug_mu_trop_wwnd')
@@ -389,7 +389,7 @@ if (downloadonly eq 0) then begin
             store_data,'iug_mu_trop_pwr'+bname[l],data={x:mu_time, y:pwr2_mu, v:height2},dlimit=dlimit
 
            ;----Edge data cut:
-            time_clip,'iug_mu_trop_pwr'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_pwr'+bname[l]
+            time_clip,'iug_mu_trop_pwr'+bname[l], init_time2[0], init_time2[1], newname = 'iug_mu_trop_pwr'+bname[l]
           
            ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_pwr*')
@@ -408,7 +408,7 @@ if (downloadonly eq 0) then begin
             store_data,'iug_mu_trop_wdt'+bname[l],data={x:mu_time, y:wdt2_mu, v:height2},dlimit=dlimit
 
            ;----Edge data cut:
-            time_clip,'iug_mu_trop_wdt'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_wdt'+bname[l]
+            time_clip,'iug_mu_trop_wdt'+bname[l], init_time2[0], init_time2[1], newname = 'iug_mu_trop_wdt'+bname[l]
            
            ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_wdt*')
@@ -427,7 +427,7 @@ if (downloadonly eq 0) then begin
             store_data,'iug_mu_trop_dpl'+bname[l],data={x:mu_time, y:dpl2_mu, v:height2},dlimit=dlimit
 
            ;----Edge data cut:
-            time_clip,'iug_mu_trop_dpl'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_dpl'+bname[l]
+            time_clip,'iug_mu_trop_dpl'+bname[l], init_time2[0], init_time2[1], newname = 'iug_mu_trop_dpl'+bname[l]
             
            ;---Add options and tdegap: 
             new_vars=tnames('iug_mu_trop_dpl*')
@@ -444,7 +444,7 @@ if (downloadonly eq 0) then begin
             store_data,'iug_mu_trop_pn'+bname[l],data={x:mu_time, y:pnoise2_mu},dlimit=dlimit
 
            ;----Edge data cut:
-            time_clip,'iug_mu_trop_pn'+bname[l], init_time[0], init_time[1], newname = 'iug_mu_trop_pn'+bname[l]
+            time_clip,'iug_mu_trop_pn'+bname[l], init_time2[0], init_time2[1], newname = 'iug_mu_trop_pn'+bname[l]
             
            ;---Add options and tdegap:
             new_vars=tnames('iug_mu_trop_pn*')
@@ -472,6 +472,9 @@ pwr1 = 0
 wdt1 = 0
 dpl1 = 0
 pn1 = 0
+
+;---Initialization of timespan for parameters:
+timespan, time_org
       
 ;*************************
 ;Print of acknowledgement:

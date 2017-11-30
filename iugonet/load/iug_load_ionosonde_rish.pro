@@ -34,7 +34,8 @@
 ;  A. Shinbori, 18/02/2013.
 ;  A. Shinbori, 24/01/2014.
 ;  A. Shinbori, 08/08/2017.
-;    
+;  A. Shinbori, 29/11/2017.
+;     
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
 ; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
@@ -76,10 +77,10 @@ print, site_code
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+get_timespan, time_org
+day_org = (time_org[1] - time_org[0])/86400.d
+day_mod = day_org + 1
+timespan, time_org[0] - 3600.0d * 9.0d, day_mod
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
@@ -189,9 +190,8 @@ if (downloadonly eq 0) then begin
    ;==============================================================
    ;Change time window associated with a time shift from UT to LT:
    ;==============================================================
-    get_timespan, time
-    timespan, time[0] + 3600.0d * 9.0d, day_org
-    get_timespan, init_time
+    timespan, time_org
+    get_timespan, init_time2
 
   ;==============================
   ;Store data in TPLOT variables:
@@ -215,7 +215,7 @@ if (downloadonly eq 0) then begin
          store_data,'iug_ionosonde_sgk_ionogram',data={x:site_time,y:intensity_all_f2,v1:freq,v2:height3},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_ionosonde_sgk_ionogram', init_time[0], init_time[1], newname = 'iug_ionosonde_sgk_ionogram'
+         time_clip, 'iug_ionosonde_sgk_ionogram', init_time2[0], init_time2[1], newname = 'iug_ionosonde_sgk_ionogram'
 
       endif
 
@@ -230,7 +230,7 @@ if (downloadonly eq 0) then begin
                store_data,'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz',data={x:site_time,y:power,v:height3},dlimit=dlimit
 
               ;----Edge data cut:
-               time_clip, 'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz', init_time[0], init_time[1], newname = 'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz'
+               time_clip, 'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz', init_time2[0], init_time2[1], newname = 'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz'
 
               ;---Add options
                options,'iug_ionosonde_sgk_freq_'+strtrim(string(i/10+2),2)+'MHz',ytitle = 'Height [km]', ztitle = 'Echo power at '+strtrim(string(i/10+2),2)+' [MHz]'
@@ -252,6 +252,9 @@ if new_vars[0] ne '' then begin
    print,'Data loading is successful!!'
    print,'*****************************
 endif
+
+;---Initialization of timespan for parameters-1:
+timespan, time_org
 
 ;*************************
 ;Print of acknowledgement:

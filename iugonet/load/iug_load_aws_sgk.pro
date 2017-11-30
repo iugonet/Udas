@@ -28,6 +28,7 @@
 ;MODIFICATIONS:
 ;  A. Shinbori, 24/01/2014.
 ;  A. Shinbori, 08/08/2017. 
+;  A. Shinbori, 29/11/2017.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -70,10 +71,10 @@ print, site_code
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+get_timespan, time_org
+day_org = (time_org[1] - time_org[0])/86400.d
+day_mod = day_org + 1
+timespan, time_org[0] - 3600.0d * 9.0d, day_mod
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
@@ -203,9 +204,8 @@ if (downloadonly eq 0) then begin
    ;==============================================================
    ;Change time window associated with a time shift from UT to LT:
    ;==============================================================
-    get_timespan, time
-    timespan, time[0] + 3600.0d * 9.0d, day_org
-    get_timespan, init_time         
+    timespan, time_org
+    get_timespan, init_time2         
     
    ;==============================
    ;Store data in TPLOT variables:
@@ -230,11 +230,11 @@ if (downloadonly eq 0) then begin
       store_data,'iug_aws_sgk_vwnd',data={x:aws_time, y:aws_vwnd},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip, 'iug_aws_sgk_press', init_time[0], init_time[1], newname = 'iug_aws_sgk_press'
-      time_clip, 'iug_aws_sgk_rh', init_time[0], init_time[1], newname = 'iug_aws_sgk_rh'
-      time_clip, 'iug_aws_sgk_temp', init_time[0], init_time[1], newname = 'iug_aws_sgk_temp'
-      time_clip, 'iug_aws_sgk_uwnd', init_time[0], init_time[1], newname = 'iug_aws_sgk_uwnd'
-      time_clip, 'iug_aws_sgk_vwnd', init_time[0], init_time[1], newname = 'iug_aws_sgk_vwnd'
+      time_clip, 'iug_aws_sgk_press', init_time2[0], init_time2[1], newname = 'iug_aws_sgk_press'
+      time_clip, 'iug_aws_sgk_rh', init_time2[0], init_time2[1], newname = 'iug_aws_sgk_rh'
+      time_clip, 'iug_aws_sgk_temp', init_time2[0], init_time2[1], newname = 'iug_aws_sgk_temp'
+      time_clip, 'iug_aws_sgk_uwnd', init_time2[0], init_time2[1], newname = 'iug_aws_sgk_uwnd'
+      time_clip, 'iug_aws_sgk_vwnd', init_time2[0], init_time2[1], newname = 'iug_aws_sgk_vwnd'
       
      ;---Options of each tplot variable 
       new_vars=tnames('iug_aws_sgk_press')
@@ -264,6 +264,10 @@ if (downloadonly eq 0) then begin
       tdegap, 'iug_aws_sgk_uwnd',/overwrite
       tdegap, 'iug_aws_sgk_vwnd',/overwrite
    endif
+   
+   ;---Initialization of timespan for sites:
+   timespan, time_org
+
 endif
  
 new_vars=tnames('iug_aws_*')

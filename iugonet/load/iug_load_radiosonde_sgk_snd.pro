@@ -27,6 +27,7 @@
 ;  A. Shinbori, 24/01/2014.
 ;  A. Shinbori, 28/10/2014.
 ;  A. Shinbori, 09/08/2017.
+;  A. Shinbori, 30/11/2017.
 ;    
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -59,10 +60,10 @@ endfor
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+get_timespan, time_org
+day_org = (time_org[1] - time_org[0])/86400.d
+day_mod = day_org + 1
+timespan, time_org[0] - 3600.0d * 9.0d, day_mod
 
 ;==================================================================
 ;Download files, read data, and create tplot vars at each component
@@ -89,7 +90,7 @@ if ~size(fns,/type) then begin
    source = file_retrieve(/struct)
    source.verbose=verbose
    source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/sgk/radiosonde/snd/'
-   source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/mu/sondedb/'
+   source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/sonde/data/shigaraki/snd/'
   
   ;=======================================================  
   ;Get files and local paths, and concatenate local paths:
@@ -238,9 +239,8 @@ if (downloadonly eq 0) then begin
   ;==============================================================
   ;Change time window associated with a time shift from UT to LT:
   ;==============================================================
-   get_timespan, time
-   timespan, time[0] + 3600.0d * 9.0d, day_org
-   get_timespan, init_time
+   timespan, time_org
+   get_timespan, init_time2
 
       
   ;==============================
@@ -261,31 +261,31 @@ if (downloadonly eq 0) then begin
       store_data,'iug_radiosonde_sgk_press',data={x:sonde_time, y:sonde_press, v:height/1000.0},dlimit=dlimit
       
      ;----Edge data cut:
-      time_clip,'iug_radiosonde_sgk_press', init_time[0], init_time[1], newname = 'iug_radiosonde_sgk_press'
+      time_clip,'iug_radiosonde_sgk_press', init_time2[0], init_time2[1], newname = 'iug_radiosonde_sgk_press'
       options,'iug_radiosonde_sgk_press',ytitle='RSND-sgk!CHeight!C[km]',ztitle='Press.!C[hPa]'
 
       store_data,'iug_radiosonde_sgk_temp',data={x:sonde_time, y:sonde_temp, v:height/1000.0},dlimit=dlimit
       
      ;----Edge data cut:
-      time_clip,'iug_radiosonde_sgk_temp', init_time[0], init_time[1], newname = 'iug_radiosonde_sgk_temp'
+      time_clip,'iug_radiosonde_sgk_temp', init_time2[0], init_time2[1], newname = 'iug_radiosonde_sgk_temp'
       options,'iug_radiosonde_sgk_temp',ytitle='RSND-sgk!CHeight!C[km]',ztitle='Temp.!C[deg.]'
 
       store_data,'iug_radiosonde_sgk_rh',data={x:sonde_time, y:sonde_rh, v:height/1000.0},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_radiosonde_sgk_rh', init_time[0], init_time[1], newname = 'iug_radiosonde_sgk_rh'
+      time_clip,'iug_radiosonde_sgk_rh', init_time2[0], init_time2[1], newname = 'iug_radiosonde_sgk_rh'
       options,'iug_radiosonde_sgk_rh',ytitle='RSND-sgk!CHeight!C[km]',ztitle='RH!C[%]'
 
       store_data,'iug_radiosonde_sgk_vertical_velocity',data={x:sonde_time, y:sonde_vertical_velocity, v:height/1000.0},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_radiosonde_sgk_uwnd', init_time[0], init_time[1], newname = 'iug_radiosonde_sgk_uwnd'
+      time_clip,'iug_radiosonde_sgk_uwnd', init_time2[0], init_time2[1], newname = 'iug_radiosonde_sgk_uwnd'
       options,'iug_radiosonde_sgk_vertical_velocity',ytitle='RSND-sgk!CHeight!C[km]',ztitle='Ascending speed!C[m/s]'
 
       store_data,'iug_radiosonde_sgk_vertical_height',data={x:sonde_time, y:sonde_vertical_height, v:height/1000.0},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_radiosonde_sgk_vwnd', init_time[0], init_time[1], newname = 'iug_radiosonde_sgk_vwnd'
+      time_clip,'iug_radiosonde_sgk_vwnd', init_time2[0], init_time2[1], newname = 'iug_radiosonde_sgk_vwnd'
       options,'iug_radiosonde_sgk_vertical_height',ytitle='RSND-sgk!CHeight!C[km]',ztitle='Height!C[km]'
       options, ['iug_radiosonde_sgk_press','iug_radiosonde_sgk_temp',$
                 'iug_radiosonde_sgk_rh',$
@@ -310,6 +310,9 @@ if (downloadonly eq 0) then begin
       tdegap, 'iug_radiosonde_sgk_vertical_height',/overwrite
    endif
 endif 
+
+;---Initialization of timespan for parameters-1:
+timespan, time_org
 
 new_vars=tnames('iug_radiosonde_*')
 if new_vars[0] ne '' then begin    

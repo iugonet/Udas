@@ -34,11 +34,12 @@
 ; A. Shinbori, 12/11/2012.
 ; A. Shinbori, 24/12/2012.
 ; A. Shinbori, 24/01/2014.
+; A. Shinbori, 30/11/2017.
 ; 
 ;ACKNOWLEDGEMENT:
-; $LastChangedBy: nikos $
-; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
-; $LastChangedRevision: 23337 $
+; $LastChangedBy:  $
+; $LastChangedDate:  $
+; $LastChangedRevision:  $
 ; $URL $
 ;-
 
@@ -81,16 +82,24 @@ print, levels
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
+;===============================================
 ;Get timespan, define FILE_NAMES, and load data:
 ;===============================================
-;
+get_timespan, time_org
+
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 jj=0L
 for ii=0L,n_elements(levels)-1 do begin
    for iii=0,n_elements(parameters)-1 do begin
-      if ~size(fns,/type) then begin
+     ;==============================================================
+     ;Change time window associated with a time shift from UT to LT:
+     ;==============================================================
+      day_org = (time_org[1] - time_org[0])/86400.d
+      day_mod = day_org + 1
+      timespan, time_org[0] - 3600.0d * 9.0d, day_mod      if ~size(fns,/type) then begin
+
         ;****************************
         ;Get files for ith component:
         ;****************************
@@ -109,7 +118,7 @@ for ii=0L,n_elements(levels)-1 do begin
         ;=======================================================
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
-         local_paths = spd_download(remote_file=file_names, remote_path=source.remote_data_dir, local_path=source.local_data_dir, _extra=source, /last_version)
+         local_paths=file_retrieve(file_names,_extra=source)
          local_paths_all = ~(~size(local_paths_all,/type)) ? $
                            [local_paths_all, local_paths] : local_paths
          if ~(~size(local_paths_all,/type)) then local_paths=local_paths_all
@@ -211,6 +220,12 @@ for ii=0L,n_elements(levels)-1 do begin
             free_lun,lun  
          endfor
 
+        ;==============================================================
+        ;Change time window associated with a time shift from UT to LT:
+        ;==============================================================
+         timespan, time_org
+         get_timespan, init_time2
+
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================
@@ -227,6 +242,9 @@ for ii=0L,n_elements(levels)-1 do begin
            ;Create tplot variable for wind data:
             dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'T. Nakamura'))
             store_data,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii],data={x:mu_time, y:mu_data, v:altitude},dlimit=dlimit
+
+           ;----Edge data cut:
+            time_clip,'iug_mu_meso_'+parameters[iii]+'_'+levels[ii], init_time2[0], init_time2[1], newname = 'iug_mu_meso_'+parameters[iii]+'_'+levels[ii]
            
            ;---Add options:
             new_vars=tnames('iug_mu_meso_'+parameters[iii]+'_'+levels[ii])
@@ -255,8 +273,12 @@ for ii=0L,n_elements(levels)-1 do begin
      
       endif
       jj=n_elements(local_paths)
+     ;---Initialization of timespan for parameters:
+      timespan, time_org
    endfor
    jj=n_elements(local_paths)
+  ;---Initialization of timespan for parameters:
+   timespan, time_org
 endfor
   
 new_vars=tnames('iug_mu_meso_*')

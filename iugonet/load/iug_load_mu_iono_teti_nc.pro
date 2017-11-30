@@ -29,7 +29,8 @@
 ; A. Shinbori, 24/12/2012.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 09/08/2017.
-; 
+; A. Shinbori, 30/11/2017.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
 ; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
@@ -52,10 +53,10 @@ if (not keyword_set(verbose)) then verbose=2
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+get_timespan, time_org
+day_org = (time_org[1] - time_org[0])/86400.d
+day_mod = day_org + 1
+timespan, time_org[0] - 3600.0d * 9.0d, day_mod
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
@@ -213,9 +214,8 @@ if (downloadonly eq 0) then begin
   ;==============================================================
   ;Change time window associated with a time shift from UT to LT:
   ;==============================================================
-   get_timespan, time
-   timespan, time[0] + 3600.0d * 9.0d, day_org
-   get_timespan, init_time
+   timespan, time_org
+   get_timespan, init_time2
 
   ;==============================
   ;Store data in TPLOT variables:
@@ -236,42 +236,42 @@ if (downloadonly eq 0) then begin
       store_data,'iug_mu_iono_ti',data={x:site_time, y:ti_app,v:height},dlimit=dlimit
 
       ;----Edge data cut:
-      time_clip,'iug_mu_iono_ti', init_time[0], init_time[1], newname = 'iug_mu_iono_ti'
+      time_clip,'iug_mu_iono_ti', init_time2[0], init_time2[1], newname = 'iug_mu_iono_ti'
       options,'iug_mu_iono_ti',ytitle='MU-iono!CHeight!C[km]',ztitle='Ion temp.!C[K]'
       options,'iug_mu_iono_ti',spec=1
       
       store_data,'iug_mu_iono_te',data={x:site_time, y:te_app,v:height},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_te', init_time[0], init_time[1], newname = 'iug_mu_iono_te'      
+      time_clip,'iug_mu_iono_te', init_time2[0], init_time2[1], newname = 'iug_mu_iono_te'      
       options,'iug_mu_iono_te',ytitle='MU-iono!CHeight!C[km]',ztitle='Electron temp.!C[K]'
       options,'iug_mu_iono_te',spec=1
       
       store_data,'iug_mu_iono_er_ti',data={x:site_time, y:er_ti_app,v:height},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_er_ti', init_time[0], init_time[1], newname = 'iug_mu_iono_er_ti'      
+      time_clip,'iug_mu_iono_er_ti', init_time2[0], init_time2[1], newname = 'iug_mu_iono_er_ti'      
       options,'iug_mu_iono_er_ti',ytitle='MU-iono!CHeight!C[km]',ztitle='Ion temp. Error!C[K]'
       options,'iug_mu_iono_er_ti',spec=1
       
       store_data,'iug_mu_iono_er_te',data={x:site_time, y:er_te_app,v:height},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_er_te', init_time[0], init_time[1], newname = 'iug_mu_iono_er_te'      
+      time_clip,'iug_mu_iono_er_te', init_time2[0], init_time2[1], newname = 'iug_mu_iono_er_te'      
       options,'iug_mu_iono_er_te',ytitle='MU-iono!CHeight!C[km]',ztitle='Electron temp. Error!C[K]'
       options,'iug_mu_iono_er_te',spec=1
       
       store_data,'iug_mu_iono_er_tr',data={x:site_time, y:er_tr_app,v:height},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_er_tr', init_time[0], init_time[1], newname = 'iug_mu_iono_er_tr'      
+      time_clip,'iug_mu_iono_er_tr', init_time2[0], init_time2[1], newname = 'iug_mu_iono_er_tr'      
       options,'iug_mu_iono_er_tr',ytitle='MU-iono!CHeight!C[km]',ztitle='Te/Ti Error!C[K]'
       options,'iug_mu_iono_er_tr',spec=1
       
       store_data,'iug_mu_iono_snr',data={x:site_time, y:snr_app,v:height},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_snr', init_time[0], init_time[1], newname = 'iug_mu_iono_snr'      
+      time_clip,'iug_mu_iono_snr', init_time2[0], init_time2[1], newname = 'iug_mu_iono_snr'      
       options,'iug_mu_iono_snr',ytitle='MU-iono!CHeight!C[km]',ztitle='SNR!C[dB]'
       options,'iug_mu_iono_snr',spec=1
       
@@ -293,6 +293,9 @@ if (downloadonly eq 0) then begin
    er_tr_app=0
    snr_app=0
 endif
+
+;---Initialization of timespan for parameters:
+timespan, time_org
 
 new_vars=tnames('iug_mu_iono_ti')
 if new_vars[0] ne '' then begin  

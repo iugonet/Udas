@@ -32,6 +32,7 @@
 ; A. Shinbori, 10/01/2014.
 ; A. Shinbori, 03/02/2014. 
 ; A. Shinbori, 09/08/2017.
+; A. Shinbori, 29/11/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -84,19 +85,22 @@ endfor
 ;**************************
 ;Loop on downloading files:
 ;**************************
-;==============================================================
-;Change time window associated with a time shift from UT to LT:
-;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+
+get_timespan, time_org
+
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
 jj=0L
-for iii=0L,n_elements(parameters)-1 do begin   
+for iii=0L,n_elements(parameters)-1 do begin
+  ;==============================================================
+  ;Change time window associated with a time shift from UT to LT:
+  ;==============================================================  
+  day_org = (time_org[1] - time_org[0])/86400.d
+  day_mod = day_org + 1
+  timespan, time_org[0] - 3600.0d * 9.0d, day_mod
+  
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -256,9 +260,8 @@ for iii=0L,n_elements(parameters)-1 do begin
      ;==============================================================
      ;Change time window associated with a time shift from UT to LT:
      ;==============================================================
-      get_timespan, time
-      timespan, time[0] + 3600.0d * 9.0d, day_org
-      get_timespan, init_time
+      timespan, time_org
+      get_timespan, init_time2
 
      ;==============================
      ;Store data in TPLOT variables:
@@ -277,7 +280,7 @@ for iii=0L,n_elements(parameters)-1 do begin
          store_data,'iug_meteor_sgk_uwnd_'+parameters[iii],data={x:site_time, y:zon_wind, v:height},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_meteor_sgk_uwnd_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_meteor_sgk_uwnd_'+parameters[iii]
+         time_clip, 'iug_meteor_sgk_uwnd_'+parameters[iii], init_time2[0], init_time2[1], newname = 'iug_meteor_sgk_uwnd_'+parameters[iii]
          
          new_vars=tnames('iug_meteor_sgk_uwnd_'+parameters[iii])
          if new_vars[0] ne '' then begin      
@@ -288,7 +291,7 @@ for iii=0L,n_elements(parameters)-1 do begin
          store_data,'iug_meteor_sgk_vwnd_'+parameters[iii],data={x:site_time, y:mer_wind, v:height},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_meteor_sgk_vwnd_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_meteor_sgk_vwnd_'+parameters[iii]
+         time_clip, 'iug_meteor_sgk_vwnd_'+parameters[iii], init_time2[0], init_time2[1], newname = 'iug_meteor_sgk_vwnd_'+parameters[iii]
 
          new_vars=tnames('iug_meteor_sgk_vwnd_'+parameters[iii])
          if new_vars[0] ne '' then begin     
@@ -299,7 +302,7 @@ for iii=0L,n_elements(parameters)-1 do begin
          store_data,'iug_meteor_sgk_uwndsig_'+parameters[iii],data={x:site_time, y:zon_thermal, v:height},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_meteor_sgk_uwndsig_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_meteor_sgk_uwndsig_'+parameters[iii]
+         time_clip, 'iug_meteor_sgk_uwndsig_'+parameters[iii], init_time2[0], init_time2[1], newname = 'iug_meteor_sgk_uwndsig_'+parameters[iii]
          
          new_vars=tnames('iug_meteor_sgk_uwndsig_'+parameters[iii])
          if new_vars[0] ne '' then begin
@@ -310,7 +313,7 @@ for iii=0L,n_elements(parameters)-1 do begin
          store_data,'iug_meteor_sgk_vwndsig_'+parameters[iii],data={x:site_time, y:mer_thermal, v:height},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_meteor_sgk_vwndsig_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_meteor_sgk_vwndsig_'+parameters[iii]
+         time_clip, 'iug_meteor_sgk_vwndsig_'+parameters[iii], init_time2[0], init_time2[1], newname = 'iug_meteor_sgk_vwndsig_'+parameters[iii]
         
          new_vars=tnames('iug_meteor_sgk_uwndsig_'+parameters[iii])
          if new_vars[0] ne '' then begin
@@ -321,7 +324,7 @@ for iii=0L,n_elements(parameters)-1 do begin
          store_data,'iug_meteor_sgk_mwnum_'+parameters[iii],data={x:site_time, y:meteor_num, v:height},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_meteor_sgk_mwnum_'+parameters[iii], init_time[0], init_time[1], newname = 'iug_meteor_sgk_mwnum_'+parameters[iii]
+         time_clip, 'iug_meteor_sgk_mwnum_'+parameters[iii], init_time2[0], init_time2[1], newname = 'iug_meteor_sgk_mwnum_'+parameters[iii]
          
          new_vars=tnames('iug_meteor_sgk_vwndsig_'+parameters[iii])
          if new_vars[0] ne '' then begin
@@ -367,6 +370,8 @@ for iii=0L,n_elements(parameters)-1 do begin
       zlim, 'iug_meteor_sgk_vwnd_*',-100,100
    endif
    jj=n_elements(local_paths)
+  ;---Initializing timespan: 
+   timespan, time_org
 endfor
 
 new_vars=tnames('iug_meteor_sgk_*')

@@ -28,6 +28,7 @@
 ; A. Shinbori, 24/12/2012. 
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 09/08/2017.
+; A. Shinbori, 30/11/2017.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -51,10 +52,10 @@ if (not keyword_set(verbose)) then verbose=2
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 9.0d, day
+get_timespan, time_org
+day_org = (time_org[1] - time_org[0])/86400.d
+day_mod = day_org + 1
+timespan, time_org[0] - 3600.0d * 9.0d, day_mod
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
@@ -207,9 +208,8 @@ if (downloadonly eq 0) then begin
   ;==============================================================
   ;Change time window associated with a time shift from UT to LT:
   ;==============================================================
-   get_timespan, time
-   timespan, time[0] + 3600.0d * 9.0d, day_org
-   get_timespan, init_time
+   timespan, time_org
+   get_timespan, init_time2
 
   ;==============================
   ;Store data in TPLOT variables:
@@ -230,37 +230,37 @@ if (downloadonly eq 0) then begin
       store_data,'iug_mu_iono_Vperp_e',data={x:site_time, y:Vperp_e_app},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_Vperp_e', init_time[0], init_time[1], newname = 'iug_mu_iono_Vperp_e'
+      time_clip,'iug_mu_iono_Vperp_e', init_time2[0], init_time2[1], newname = 'iug_mu_iono_Vperp_e'
       options,'iug_mu_iono_Vperp_e',ytitle='MU-iono!CVperp_e!C[m/s]'
       
       store_data,'iug_mu_iono_Vperp_n',data={x:site_time, y:Vperp_n_app},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_Vperp_n', init_time[0], init_time[1], newname = 'iug_mu_iono_Vperp_n'      
+      time_clip,'iug_mu_iono_Vperp_n', init_time2[0], init_time2[1], newname = 'iug_mu_iono_Vperp_n'      
       options,'iug_mu_iono_Vperp_n',ytitle='MU-iono!CVperp_n!C[m/s]'
       
       store_data,'iug_mu_iono_Vpara_u',data={x:site_time, y:Vpara_u_app},dlimit=dlimit
       
       ;----Edge data cut:
-      time_clip,'iug_mu_iono_Vpara_u', init_time[0], init_time[1], newname = 'iug_mu_iono_Vpara_u'            
+      time_clip,'iug_mu_iono_Vpara_u', init_time2[0], init_time2[1], newname = 'iug_mu_iono_Vpara_u'            
       options,'iug_mu_iono_Vpara_u',ytitle='MU-iono!CVpara_u!C[m/s]'
       
       store_data,'iug_mu_iono_Vz_ns',data={x:site_time, y:Vz_ns_app},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_Vz_ns', init_time[0], init_time[1], newname = 'iug_mu_iono_Vz_ns'
+      time_clip,'iug_mu_iono_Vz_ns', init_time2[0], init_time2[1], newname = 'iug_mu_iono_Vz_ns'
       options,'iug_mu_iono_Vz_ns',ytitle='MU-iono!CVz_ns!C[m/s]'
       
       store_data,'iug_mu_iono_Vz_ew',data={x:site_time, y:Vz_ew_app},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_Vz_ew', init_time[0], init_time[1], newname = 'iug_mu_iono_Vz_ew'      
+      time_clip,'iug_mu_iono_Vz_ew', init_time2[0], init_time2[1], newname = 'iug_mu_iono_Vz_ew'      
       options,'iug_mu_iono_Vz_ew',ytitle='MU-iono!CVz_ew!C[m/s]'
       
       store_data,'iug_mu_iono_Vd_b',data={x:site_time, y:Vd_b_app},dlimit=dlimit
 
      ;----Edge data cut:
-      time_clip,'iug_mu_iono_Vd_b', init_time[0], init_time[1], newname = 'iug_mu_iono_Vz_ew'
+      time_clip,'iug_mu_iono_Vd_b', init_time2[0], init_time2[1], newname = 'iug_mu_iono_Vz_ew'
       options,'iug_mu_iono_Vd_b',ytitle='MU-iono!CVd_b!C[m/s]'
    endif
   
@@ -282,6 +282,9 @@ if (downloadonly eq 0) then begin
    tdegap, 'iug_mu_iono_Vd_b',dt=3600,/overwrite 
   
 endif
+
+;---Initialization of timespan for parameters:
+timespan, time_org
 
 new_vars=tnames('iug_mu_iono_V*')
 if new_vars[0] ne '' then begin  

@@ -30,7 +30,8 @@
 ; A. Shinbori, 18/12/2012.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 08/08/2017.
-; 
+; A. Shinbori, 29/11/2017.
+;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
 ; $LastChangedDate: 2017-05-19 11:44:55 -0700 (Fri, 19 May 2017) $
@@ -53,10 +54,10 @@ if (not keyword_set(verbose)) then verbose=2
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, init_time
-day_org = (init_time[1] - init_time[0])/86400.d
-day = day_org + 1
-timespan, init_time[0] - 3600.0d * 7.0d, day
+get_timespan, time_org
+day_org = (time_org[1] - time_org[0])/86400.d
+day_mod = day_org + 1
+timespan, time_org[0] - 3600.0d * 7.0d, day_mod
 
 if ~size(fns,/type) then begin
   ;****************************
@@ -266,9 +267,8 @@ endfor
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, time
-timespan, time[0] + 3600.0d * 7.0d, day_org
-get_timespan, init_time
+timespan, time_org
+get_timespan, init_time2
 
 ;==============================
 ;Store data in TPLOT variables:
@@ -297,7 +297,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
          store_data,'iug_ear_trop_uwnd',data={x:ear_time, y:zon_wind, v:height_mwzw},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_ear_trop_uwnd', init_time[0], init_time[1], newname = 'iug_ear_trop_uwnd'
+         time_clip, 'iug_ear_trop_uwnd', init_time2[0], init_time2[1], newname = 'iug_ear_trop_uwnd'
         
         ;---Add options and tdegap:
          new_vars=tnames('iug_ear_trop_uwnd')
@@ -311,7 +311,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
          store_data,'iug_ear_trop_vwnd',data={x:ear_time, y:mer_wind, v:height_mwzw},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_ear_trop_vwnd', init_time[0], init_time[1], newname = 'iug_ear_trop_vwnd'
+         time_clip, 'iug_ear_trop_vwnd', init_time2[0], init_time2[1], newname = 'iug_ear_trop_vwnd'
         
         ;---Add options and tdegap:
          new_vars=tnames('iug_ear_trop_vwnd')
@@ -325,7 +325,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
          store_data,'iug_ear_trop_wwnd',data={x:ear_time, y:ver_wind, v:height_vw},dlimit=dlimit
 
         ;----Edge data cut:
-         time_clip, 'iug_ear_trop_wwnd', init_time[0], init_time[1], newname = 'iug_ear_trop_wwnd'
+         time_clip, 'iug_ear_trop_wwnd', init_time2[0], init_time2[1], newname = 'iug_ear_trop_wwnd'
          
         ;---Add options and tdegap:
          new_vars=tnames('iug_ear_trop_wwnd')
@@ -352,7 +352,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
              store_data,'iug_ear_trop_pwr'+bname[l],data={x:ear_time, y:pwr2_ear, v:height2},dlimit=dlimit
 
             ;----Edge data cut:
-             time_clip, 'iug_ear_trop_pwr'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_trop_pwr'+bname[l]
+             time_clip, 'iug_ear_trop_pwr'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_trop_pwr'+bname[l]
 
              new_vars=tnames('iug_ear_trop_pwr*')
              if new_vars[0] ne '' then begin
@@ -370,7 +370,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
              store_data,'iug_ear_trop_wdt'+bname[l],data={x:ear_time, y:wdt2_ear, v:height2},dlimit=dlimit
 
             ;----Edge data cut:
-             time_clip, 'iug_ear_trop_wdt'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_trop_wdt'+bname[l]
+             time_clip, 'iug_ear_trop_wdt'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_trop_wdt'+bname[l]
 
              new_vars=tnames('iug_ear_trop_wdt*')
              if new_vars[0] ne '' then begin             
@@ -389,7 +389,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
              store_data,'iug_ear_trop_dpl'+bname[l],data={x:ear_time, y:dpl2_ear, v:height2},dlimit=dlimit
 
             ;----Edge data cut:
-             time_clip, 'iug_ear_trop_dpl'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_trop_dpl'+bname[l]
+             time_clip, 'iug_ear_trop_dpl'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_trop_dpl'+bname[l]
 
              new_vars=tnames('iug_ear_trop_dpl*')
              if new_vars[0] ne '' then begin  
@@ -406,7 +406,7 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
              store_data,'iug_ear_trop_pn'+bname[l],data={x:ear_time, y:pnoise2_ear},dlimit=dlimit
 
             ;----Edge data cut:
-             time_clip, 'iug_ear_trop_pn'+bname[l], init_time[0], init_time[1], newname = 'iug_ear_trop_pn'+bname[l]
+             time_clip, 'iug_ear_trop_pn'+bname[l], init_time2[0], init_time2[1], newname = 'iug_ear_trop_pn'+bname[l]
 
              new_vars=tnames('iug_ear_trop_pn*')
              if new_vars[0] ne '' then begin 
@@ -424,6 +424,9 @@ acknowledgstring = 'The Equatorial Atmosphere Radar belongs to Research Institut
       endif
    endif
 endif
+
+;---Initialization of timespan for parameters-1:
+timespan, time_org
 
 ;---Clear time and data buffer:
 ear_time=0
