@@ -65,7 +65,7 @@ if (not keyword_set(verbose)) then verbose=2
 if not keyword_set(trange) then begin
   get_timespan, time_org
 endif else begin
-  time_org =time_double(trange)
+  time_org = time_double(trange)
 endelse
 
 ;***********
@@ -292,7 +292,8 @@ for ii=0L,h_max-1 do begin
         ;==============================================================
          timespan, time_org
          get_timespan, init_time2
-
+         if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) - 9.0d * 3600.0d); for GUI
+         
         ;==============================
         ;Store data in TPLOT variables:
         ;==============================

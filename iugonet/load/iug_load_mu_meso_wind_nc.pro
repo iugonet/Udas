@@ -232,7 +232,8 @@ for ii=0L,n_elements(levels)-1 do begin
      ;==============================================================
       timespan, time_org
       get_timespan, init_time2
-
+      if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) - 9.0d * 3600.0d); for GUI
+      
       if n_elements(mu_time) gt 1 then begin
     
         ;==============================

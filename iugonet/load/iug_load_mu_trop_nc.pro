@@ -121,16 +121,6 @@ if (not keyword_set(downloadonly)) then downloadonly=0
 
 if (downloadonly eq 0) then begin
 
-  ;---Definition of parameter:
-   mu_time=0
-   zon_wind=0
-   mer_wind=0
-   ver_wind=0
-   pwr1 = 0
-   wdt1 = 0
-   dpl1 = 0
-   pn1 = 0
- 
   ;==============
   ;Loop on files: 
   ;==============
@@ -316,7 +306,8 @@ if (downloadonly eq 0) then begin
   ;==============================================================
    timespan, time_org
    get_timespan, init_time2
-
+   if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) - 9.0d * 3600.0d); for GUI
+   
    if n_elements(mu_time) gt 1 then begin
      ;---Definition of arrary names
       bname2=strarr(n_elements(beam))

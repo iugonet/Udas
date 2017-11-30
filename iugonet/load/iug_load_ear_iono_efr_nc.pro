@@ -101,6 +101,7 @@ for ii=0L,n_elements(parameters)-1 do begin
     day_mod = day_org + 1
     timespan, time_org[0] - 3600.0d * 7.0d, day_mod
     if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 7.0d * 3600.0d); for GUI
+    
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -284,7 +285,8 @@ for ii=0L,n_elements(parameters)-1 do begin
      ;==============================================================
       timespan, time_org
       get_timespan, init_time2
-
+      if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) - 7.0d * 3600.0d); for GUI
+      
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================

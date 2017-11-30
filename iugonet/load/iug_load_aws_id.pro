@@ -297,7 +297,7 @@ for ii=0L,h_max-1 do begin
        ;==============================================================
          timespan, time_org
          get_timespan, init_time2
-       
+         if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) - time_shift[ii] * 3600.d0); for GUI
        ;==============================
        ;Store data in TPLOT variables:
        ;==============================

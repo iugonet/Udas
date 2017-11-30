@@ -300,12 +300,13 @@ for ii=0L,n_elements(parameters)-1 do begin
          append_array, snr1, snr1_mu         
       endfor
 
-      ;==============================================================
-      ;Change time window associated with a time shift from UT to LT:
-      ;==============================================================
+     ;==============================================================
+     ;Change time window associated with a time shift from UT to LT:
+     ;==============================================================
       timespan, time_org
       get_timespan, init_time2
-
+      if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) - 9.0d * 3600.0d); for GUI
+      
      ;==============================
      ;Store data in TPLOT variables:
      ;==============================
