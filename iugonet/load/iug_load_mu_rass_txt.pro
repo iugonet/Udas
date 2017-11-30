@@ -48,6 +48,15 @@ pro iug_load_mu_rass_txt, parameter=parameter, $
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
 
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
+
 ;***********
 ;parameters:
 ;***********
@@ -69,9 +78,6 @@ unit_all = strsplit('m/s degree',' ', /extract)
 ;**************************
 ;Loop on downloading files:
 ;**************************
-
-get_timespan, time_org
-
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -84,6 +90,7 @@ for ii=0L,n_elements(parameters)-1 do begin
    day_org = (time_org[1] - time_org[0])/86400.d
    day_mod = day_org + 1
    timespan, time_org[0] - 3600.0d * 9.0d, day_mod
+   if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 9.0d * 3600.0d); for GUI
    
    if ~size(fns,/type) then begin
      ;****************************
@@ -187,8 +194,7 @@ for ii=0L,n_elements(parameters)-1 do begin
                if month eq 'DEC' then month ='12' 
                 
               ;---Convert time from local time to unix time      
-               time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+u[1]) $
-                      -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
+               time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+u[1]) - double(9) * 3600.0d
               
               ;---Replace missing value by NaN:
                for j=0L,n_elements(h_data)-2 do begin

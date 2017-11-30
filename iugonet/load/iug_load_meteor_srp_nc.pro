@@ -65,6 +65,15 @@ if (not keyword_set(verbose)) then verbose=2
 ;*****************************
 if (not keyword_set(length)) then length='1_day'
 
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
+
 ;****************
 ;Parameter check:
 ;****************
@@ -108,6 +117,7 @@ for iii=0L,n_elements(parameters)-1 do begin
    day_org = (time_org[1] - time_org[0])/86400.d
    day_mod = day_org + 1
    timespan, time_org[0] - 3600.0d * 7.0d, day_mod
+   if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 7.0d * 3600.0d); for GUI
    
    if ~size(fns,/type) then begin
      ;****************************
@@ -143,16 +153,7 @@ for iii=0L,n_elements(parameters)-1 do begin
    if (downloadonly eq 0) then begin      
      ;======================================
      ;Loop on files (read the NetCDF files): 
-     ;======================================
- 
-     ;---Definition time and parameters:
-      site_time=0
-      zon_wind=0
-      mer_wind=0
-      zon_thermal=0
-      mer_thermal=0
-      meteor_num=0
-   
+     ;======================================   
       for j=jj,n_elements(local_paths)-1 do begin
          file= local_paths[j]
          if file_test(/regular,file) then  dprint,'Loading the wind data estimated from the MWR at Serpong: ',file $

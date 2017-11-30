@@ -45,6 +45,15 @@ pro iug_load_mu_is_drift_nc, datatype = datatype, parameter = parameter,$
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
+
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
  
 ;************************************
 ;Load 'thermosphere' data by default:
@@ -84,16 +93,13 @@ acknowledgstring = 'If you acquire the middle and upper atmospher (MU) radar dat
 ;******************************************************************
 ;Loop on downloading files
 ;******************************************************************
-;Get timespan, define FILE_NAMES, and load data:
-;===============================================
-get_timespan, time_org
-
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
 day_org = (time_org[1] - time_org[0])/86400.d
 day_mod = day_org + 1
 timespan, time_org[0] - 3600.0d * 9.0d, day_mod
+if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 9.0d * 3600.0d); for GUI
 
 h=0
 jj=0
@@ -112,7 +118,7 @@ site_time=0
        source = file_retrieve(/struct)
        source.verbose=verbose
        source.local_data_dir =  root_data_dir() + 'iugonet/rish/misc/sgk/mu/is/DRIFT/netcdf/'
-     ;  source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/'+site_data_dir[iii+kk]
+      ; source.remote_data_dir = 'http://database.rish.kyoto-u.ac.jp/arch/iugonet/data/mwr/serpong/nc/'+site_data_dir[iii+kk]
 
     ;=======================================================    
     ;Get files and local paths, and concatenate local paths:

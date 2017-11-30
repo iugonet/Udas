@@ -47,6 +47,15 @@ pro iug_load_aws_id, site=site, $
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
 
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
+
 ;****************
 ;Site code check:
 ;****************
@@ -74,11 +83,6 @@ site_data_dir = strsplit('bik/aws/ ktb/aws/ mnd/aws/ pon/aws/',' ', /extract)
 ;**************************
 ;Loop on downloading files:
 ;**************************
-;==============================================================
-;Change time window associated with a time shift from UT to LT:
-;==============================================================
-get_timespan, time_org
-
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -124,7 +128,8 @@ for ii=0L,h_max-1 do begin
       day_org = (time_org[1] - time_org[0])/86400.d
       day_mod = day_org + 1
       timespan, time_org[0] - 3600.0d * time_shift[ii], day_mod
-
+      if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + time_shift[ii] * 3600.d0); for GUI
+      
      ;****************************
      ;Get files for ith component:
      ;****************************
@@ -158,16 +163,6 @@ for ii=0L,h_max-1 do begin
       
      ;---Definition of string variable:
       s=''
-
-     ;---Initialize data and time buffer
-      aws_time = 0
-      aws_press = 0
-      aws_precipi = 0
-      aws_rh = 0
-      aws_sr = 0
-      aws_temp = 0
-      aws_wnddir = 0
-      aws_wndspd = 0
     
      ;==============      
      ;Loop on files: 
@@ -190,10 +185,10 @@ for ii=0L,h_max-1 do begin
              
        ;---Definition of time zone at each station:
         case site_code2 of
-           'pontianak':time_zone = 7.0
-           'kototabang':time_zone = 7.0
-           'manado':time_zone = 8.0
-           'biak':time_zone = 9.0   
+           'pontianak':time_zone = 7.0d
+           'kototabang':time_zone = 7.0d
+           'manado':time_zone = 8.0d
+           'biak':time_zone = 9.0d
         endcase
          
        ;---Read the data:
@@ -206,8 +201,7 @@ for ii=0L,h_max-1 do begin
               data_arr = strsplit(s,',',/extract)
        
              ;---Convert time from LT to UT
-              aws_time = time_double(string(data_arr[0])+'/'+string(data_arr[1])) $
-                     -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(time_zone)+':'+string(0)+':'+string(0))
+              aws_time_data = time_double(string(data_arr[0])+'/'+string(data_arr[1])) - double(time_zone) * 3600.0d
 
              ;---Substitute each parameter: 
               if n_elements(data_arr) le 15 then begin 
@@ -285,7 +279,7 @@ for ii=0L,h_max-1 do begin
              ;=====================================
              ;Append data of time and observations:
              ;=====================================
-              append_array, aws_time_app, aws_time
+              append_array, aws_time_data_app, aws_time_data
               append_array, aws_press,press
               append_array, aws_precipi,precipi
               append_array, aws_rh,   rh
@@ -319,13 +313,13 @@ for ii=0L,h_max-1 do begin
        if size(aws_press,/type) eq 4 then begin 
          ;---Create tplot variables
           dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))            
-          store_data,'iug_aws_'+site_code[ii]+'_press',data={x:aws_time_app, y:aws_press},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_precipi',data={x:aws_time_app, y:aws_precipi},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_rh',data={x:aws_time_app, y:aws_rh},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_sr',data={x:aws_time_app, y:aws_sr},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_temp',data={x:aws_time_app, y:aws_temp},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_wnddir',data={x:aws_time_app, y:aws_wnddir},dlimit=dlimit
-          store_data,'iug_aws_'+site_code[ii]+'_wndspd',data={x:aws_time_app, y:aws_wndspd},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_press',data={x:aws_time_data_app, y:aws_press},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_precipi',data={x:aws_time_data_app, y:aws_precipi},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_rh',data={x:aws_time_data_app, y:aws_rh},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_sr',data={x:aws_time_data_app, y:aws_sr},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_temp',data={x:aws_time_data_app, y:aws_temp},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_wnddir',data={x:aws_time_data_app, y:aws_wnddir},dlimit=dlimit
+          store_data,'iug_aws_'+site_code[ii]+'_wndspd',data={x:aws_time_data_app, y:aws_wndspd},dlimit=dlimit
          
          ;----Edge data cut: 
           time_clip, 'iug_aws_'+site_code[ii]+'_press', init_time2[0], init_time2[1], newname = 'iug_aws_'+site_code[ii]+'_press' 
@@ -350,7 +344,7 @@ for ii=0L,h_max-1 do begin
        endif
      
       ;---Clear time and data buffer:
-       aws_time_app = 0
+       aws_time_data_app = 0
        aws_press = 0
        aws_sr = 0
        aws_rh = 0

@@ -34,7 +34,7 @@
 ;  A. Shinbori, 18/02/2013.
 ;  A. Shinbori, 24/01/2014.
 ;  A. Shinbori, 08/08/2017.
-;  A. Shinbori, 29/11/2017.
+;  A. Shinbori, 30/11/2017.
 ;     
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -52,6 +52,15 @@ pro iug_load_ionosonde_rish, site=site, $
 ;Verbose keyword check:
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
+
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
 
 ;****************
 ;Site code check:
@@ -77,10 +86,10 @@ print, site_code
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, time_org
 day_org = (time_org[1] - time_org[0])/86400.d
 day_mod = day_org + 1
 timespan, time_org[0] - 3600.0d * 9.0d, day_mod
+if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 9.0d * 3600.0d); for GUI
 
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:

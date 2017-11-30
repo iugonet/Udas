@@ -40,7 +40,7 @@
 ; A. Shinbori, 18/12/2012.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 09/08/2017.
-; A. Shinbori, 29/11/2017.
+; A. Shinbori, 30/11/2017.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -64,6 +64,15 @@ if (not keyword_set(verbose)) then verbose=2
 ;Load '1_day' data by default:
 ;*****************************
 if (not keyword_set(length)) then length='1_day'
+
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
 
 ;****************
 ;Parameter check:
@@ -93,9 +102,6 @@ endfor
 ;**************************
 ;Loop on downloading files:
 ;**************************
-
-get_timespan, time_org
-
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -107,7 +113,8 @@ for iii=0L,n_elements(parameters)-1 do begin
    day_org = (time_org[1] - time_org[0])/86400.d
    day_mod = day_org + 1
    timespan, time_org[0] - 3600.0d * 7.0d, day_mod 
-  
+   if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 7.0d * 3600.0d); for GUI
+   
    if ~size(fns,/type) then begin
      ;****************************    
      ;Get files for ith component:
@@ -215,8 +222,7 @@ for iii=0L,n_elements(parameters)-1 do begin
                data =  float(strsplit(strmid(s,12,55), ' ', /extract))
                
               ;---Convert time from local time to unix time  
-               time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) $
-                      -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(7)+':'+string(0)+':'+string(0))                                
+               time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) - double() * 3600.0d                            
                 
               ;---Insert data of zonal and meridional winds etc.
                if n eq 0 then begin

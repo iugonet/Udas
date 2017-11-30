@@ -45,6 +45,15 @@ pro iug_load_radiosonde_sgk_csv, downloadonly=downloadonly, $
 ;**************
 if (not keyword_set(verbose)) then verbose=2
 
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
+
 ;======================
 ;Calculation of height:
 ;======================
@@ -61,10 +70,10 @@ endfor
 ;==============================================================
 ;Change time window associated with a time shift from UT to LT:
 ;==============================================================
-get_timespan, time_org
 day_org = (time_org[1] - time_org[0])/86400.d
 day_mod = day_org + 1
 timespan, time_org[0] - 3600.0d * 9.0d, day_mod
+if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 9.0d * 3600.0d); for GUI
 
 ;==================================================================
 ;Download files, read data, and create tplot vars at each component
@@ -110,12 +119,6 @@ if (downloadonly eq 0) then begin
   ;Definition of parameters:
   ;=========================
    s=''
-   sonde_time = 0
-   sonde_press = 0
-   sonde_temp = 0
-   sonde_rh = 0
-   sonde_uwind = 0
-   sonde_vwind = 0
    
   ;==============     
   ;Loop on files: 
@@ -198,8 +201,7 @@ if (downloadonly eq 0) then begin
       endfor
 
      ;---Convert time from UT to UNIX time
-      time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hhmmss)) $
-             -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/09:00:00')
+      time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hhmmss)) - double(9) * 3600.0d
       k=0L
       for i=0L, n_elements(height)-1 do begin
          idx = where((height_data ge height[i]-15) and (height_data lt height[i]+15),cnt)

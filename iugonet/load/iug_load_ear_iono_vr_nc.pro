@@ -59,6 +59,15 @@ pro iug_load_ear_iono_vr_nc, parameter=parameter, $
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
 
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
+
 ;************
 ;parameters:
 ;************
@@ -66,13 +75,11 @@ if (not keyword_set(verbose)) then verbose=2
 parameter_all = strsplit('vb3p4a 150p8c8a 150p8c8b 150p8c8c 150p8c8d 150p8c8e 150p8c8b2a 150p8c8b2b '+$
                           '150p8c8b2c 150p8c8b2d 150p8c8b2e 150p8c8b2f',' ', /extract)
 
-
 ;--- check parameters
 if(not keyword_set(parameter)) then parameter='all'
 parameters = ssl_check_valid_name(parameter, parameter_all, /ignore_case, /include_all)
 
 print, parameters
-
 
 ;*****************
 ;Defition of unit:
@@ -83,9 +90,6 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;**************************
 ;Loop on downloading files:
 ;**************************
-
-get_timespan, time_org
-
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -97,7 +101,8 @@ for ii=0L,n_elements(parameters)-1 do begin
    day_org = (time_org[1] - time_org[0])/86400.d
    day_mod = day_org + 1
    timespan, time_org[0] - 3600.0d * 7.0d, day_mod
-
+   if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 7.0d * 3600.0d); for GUI
+   
    if ~size(fns,/type) then begin
      ;****************************
      ;Get files for ith component:
@@ -133,14 +138,6 @@ for ii=0L,n_elements(parameters)-1 do begin
      ;===========================================================
      ;Read the files:
      ;===============
-   
-     ;---Definition of time and parameters:
-      ear_time=0
-      pwr1 = 0
-      wdt1 = 0
-      dpl1 = 0
-      pn1 = 0
-      
      ;============== 
      ;Loop on files: 
      ;==============    

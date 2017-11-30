@@ -51,6 +51,15 @@ pro iug_load_mu_iono_pwr_txt, parameter = parameter, $
 ;**********************
 if (not keyword_set(verbose)) then verbose=2
 
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
+
 ;***********
 ;parameters:
 ;***********
@@ -66,9 +75,6 @@ print, parameters
 ;**************************
 ;Loop on downloading files:
 ;**************************
-
-get_timespan, time_org
-
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -82,7 +88,8 @@ for ii=0L,n_elements(parameters)-1 do begin
    day_org = (time_org[1] - time_org[0])/86400.d
    day_mod = day_org + 1
    timespan, time_org[0] - 3600.0d * 9.0d, day_mod
-  
+   if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 9.0d * 3600.0d); for GUI
+   
   if ~size(fns,/type) then begin 
      ;****************************
      ;Get files for ith component:

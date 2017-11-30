@@ -37,7 +37,7 @@
 ; A. Shinbori, 18/12/2012.
 ; A. Shinbori, 24/01/2014.
 ; A. Shinbori, 08/08/2017.
-; A. Shinbori, 29/11/2017.
+; A. Shinbori, 30/11/2017.
 ;  
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -56,6 +56,15 @@ pro iug_load_ltr_rish, site=site, $
 ;keyword check:
 ;**************
 if (not keyword_set(verbose)) then verbose=2
+
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
 
 ;***********
 ;site codes:
@@ -87,11 +96,6 @@ print, parameters
 ;--- all units (default)
 unit_all = strsplit('m/s dB',' ', /extract)
 
-;**************************
-;Loop on downloading files:
-;**************************
-get_timespan, time_org
-
 ;===================================================================
 ;Download files, read data, and create tplot vars at each component:
 ;===================================================================
@@ -103,10 +107,11 @@ for iii=0L,n_elements(parameters)-1 do begin
   ;==============================================================
   ;Change time window associated with a time shift from UT to LT:
   ;==============================================================
-  day_org = (time_org[1] - time_org[0])/86400.d
-  day_mod = day_org + 1
-  timespan, time_org[0] - 3600.0d * 9.0d, day_mod
-
+   day_org = (time_org[1] - time_org[0])/86400.d
+   day_mod = day_org + 1
+   timespan, time_org[0] - 3600.0d * 9.0d, day_mod
+   if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + 9.0d * 3600.0d); for GUI
+  
    if ~size(fns,/type) then begin
       ;****************************
       ;Get files for ith component:
@@ -146,10 +151,6 @@ for iii=0L,n_elements(parameters)-1 do begin
       ;===============
       ;---Definition of string variable:
         s=''
-
-      ;---Initialize data and time buffer:
-       ltr_data_app = 0
-       ltr_time_app = 0
       
       ;==============
       ;Loop on files: 
@@ -210,8 +211,7 @@ for iii=0L,n_elements(parameters)-1 do begin
                minute = strmid(data(0),14,2)  
                   
               ;---Convert time from local time to universal time 
-               ltr_time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) $
-                      -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(9)+':'+string(0)+':'+string(0))
+               ltr_time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+hour+':'+minute) - double(9) * 3600.0d
                if ltr_time lt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
               
               ;---Enter the missing value:

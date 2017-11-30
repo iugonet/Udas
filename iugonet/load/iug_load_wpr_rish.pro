@@ -58,6 +58,15 @@ pro iug_load_wpr_rish, site=site, $
 ;**************
 if (not keyword_set(verbose)) then verbose=2
 
+;***********************
+;Keyword check (trange):
+;***********************
+if not keyword_set(trange) then begin
+  get_timespan, time_org
+endif else begin
+  time_org =time_double(trange)
+endelse
+
 ;***********
 ;site codes:
 ;***********
@@ -103,9 +112,6 @@ unit_all = strsplit('m/s dB',' ', /extract)
 ;**************************
 ;Loop on downloading files:
 ;**************************
-
-get_timespan, time_org
-
 ;Definition of parameter
 jj=0L
 k=0L
@@ -143,6 +149,7 @@ for ii=0L,h_max-1 do begin
       day_org = (time_org[1] - time_org[0])/86400.d
       day_mod = day_org + 1
       timespan, time_org[0] - 3600.0d * time_shift[ii], day_mod
+      if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) + time_shift[ii] * 3600.0d); for GUI
       
       if ~size(fns,/type) then begin
         ;Definition of blr site names:
@@ -191,10 +198,6 @@ for ii=0L,h_max-1 do begin
         ;===============      
         ;---Definition of parameters and array:
          s=''
-
-        ;---Initialize data and time buffer:
-         wpr_data = 0
-         wpr_time = 0
          
         ;==============
         ;Loop on files: 
@@ -218,11 +221,11 @@ for ii=0L,h_max-1 do begin
             
            ;---Definition of time zone at each station:
             case site_code2 of
-              'pontianak':time_zone = 7.0
-              'kototabang':time_zone = 7.0
-              'manado':time_zone = 8.0
-              'biak':time_zone = 9.0   
-              'shigaraki':time_zone = 9.0
+              'pontianak':time_zone = 7.0d
+              'kototabang':time_zone = 7.0d
+              'manado':time_zone = 8.0d
+              'biak':time_zone = 9.0d
+              'shigaraki':time_zone = 9.0d
             endcase 
            
            ;Definition of altitude and data arraies:
@@ -264,8 +267,7 @@ for ii=0L,h_max-1 do begin
                   minute = strmid(data(0),14,2)  
                   
                  ;---Convert time from LT to UT
-                  time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)+':'+string(0)) $
-                        -time_double(string(1970)+'-'+string(1)+'-'+string(1)+'/'+string(time_zone)+':'+string(0)+':'+string(0))
+                  time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)+':'+string(0)) - double(time_zone) * 3600.0d
                  
                  ;---Enter the missing value:
                   for j=0L,n_elements(height)-2 do begin
