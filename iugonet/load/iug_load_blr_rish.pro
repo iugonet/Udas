@@ -186,7 +186,7 @@ for ii=0L,h_max-1 do begin
          source.verbose=verbose
          source.local_data_dir = root_data_dir() + 'iugonet/rish/misc/'+site_data_dir[k]+'csv/'
          source.remote_data_dir = 'http://www.rish.kyoto-u.ac.jp/radar-group/blr/'+site_code2+'/data/data/ver02.0212/'
-    
+
         ;=======================================================
         ;Get files and local paths, and concatenate local paths:
         ;=======================================================
@@ -257,7 +257,7 @@ for ii=0L,h_max-1 do begin
                if ok && keyword_set(s) then begin
                   dprint,s ,dlevel=5
                   data = strsplit(s,',',/extract)
-               
+                    
                  ;---Definition of parameters for time convert from LT to UT:
                   year = strmid(data(0),0,4)
                   month = strmid(data(0),5,2)
@@ -267,7 +267,7 @@ for ii=0L,h_max-1 do begin
                    
                  ;---Convert time from LT to UT    
                   blr_data_time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) - time_shift[ii] * 3600.0d
-                  if blr_data_time gt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0)) then break
+                  if (site_code[ii] eq 'sgk') and (blr_data_time gt time_double(string(1992)+'-'+string(9)+'-'+string(1)+'/'+string(0)+':'+string(0)+':'+string(0))) then break
                             
                  ;---Enter the missing value:
                   for j=0,n_elements(height)-2 do begin
@@ -282,6 +282,7 @@ for ii=0L,h_max-1 do begin
                  ;=============================
                   append_array, blr_data_time_app, blr_data_time
                   append_array, blr_data_app, data2 
+
                endif
             endwhile 
             free_lun,lun  
