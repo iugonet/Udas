@@ -207,6 +207,7 @@ if (downloadonly eq 0) then begin
     timespan, time_org
     get_timespan, init_time2         
     if keyword_set(trange) then trange[1] = time_string(time_double(trange[1]) - 9.0d * 3600.0d); for GUI
+    
    ;==============================
    ;Store data in TPLOT variables:
    ;==============================
@@ -220,7 +221,7 @@ if (downloadonly eq 0) then begin
                        'atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded '+ $
                        'by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.' 
  
-   if size(aws_press,/type) eq 4 then begin 
+   if size(aws_press_app,/type) eq 4 then begin 
      ;---Create tplot variables
       dlimit=create_struct('data_att',create_struct('acknowledgment',acknowledgstring,'PI_NAME', 'H. Hashiguchi'))            
       store_data,'iug_aws_sgk_press',data={x:aws_data_time_app, y:aws_press_app},dlimit=dlimit
