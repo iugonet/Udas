@@ -44,11 +44,11 @@
 ;
 ;-
 
-pro erg_load_isee_vlf, site=site, $
+pro iug_load_isee_vlf, site=site, $
         downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
         trange=trange, timeclip=timeclip,cal_gain=cal_gain
 
-iug_load_isee_vlf, site=site, $
+erg_load_isee_vlf, site=site, $
         downloadonly=downloadonly, no_server=no_server, no_download=no_download, $
         trange=trange, timeclip=timeclip,cal_gain=cal_gain
 
