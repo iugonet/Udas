@@ -177,8 +177,12 @@ pro iug_ui_load_data_load_pro,    $
       ;----- geomagnetic field fluxgate ----;
       'geomagnetic_field_fluxgate' : begin
           case datatype of
+              'icswse' : begin
+                  iug_load_gmag_icswse_iaga, trange = timeRange, site = site_or_param, resolution = parameters
+                  par_names=tnames('kyumag_mag_*') 
+              end
               'magdas#' : begin
-                  erg_load_gmag_magdas_1sec, range = timeRange, site = site_or_param
+                  erg_load_gmag_magdas_1sec, trange = timeRange, site = site_or_param
                   par_names=tnames('magdas_mag_*') 
               end 
               '210mm#' : begin
