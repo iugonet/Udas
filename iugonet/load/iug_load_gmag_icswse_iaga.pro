@@ -33,6 +33,7 @@
 ;CHANGELOG:
 ;  08-April-2015, abeshu, initial release
 ;  07-February-2018, abeshu, update for official release
+;  17-February-2018, abeshu, modified header reading
 ;
 ;ACKNOWLEDGMENT:
 ;
@@ -190,20 +191,23 @@ for i=0, nsites-1 do begin
     header = {}
     for k=0,11 do begin
       readf, lun, str
-      header = create_struct(header, strtrim(strmid(str,1,22)), strtrim(strmid(str,23,45)))
+      header = create_struct(header, strtrim(strmid(str,1,23)), strtrim(strmid(str,24,45)))
     endfor      
     
+    optional = []
     start = 12
     while (strmid(str,0,4) ne 'DATE') do begin
       readf, lun, str
+      optional = [optional, strtrim(strmid(str,0,69), 1)]
       start = start + 1
     endwhile
+    header = create_struct(header, 'OPTIONAL', optional)
 
     free_lun, lun
 
     ; read data
     sdata = read_ascii(file, data_start=start)
-    rdata = transpose(reform(sdata.field1[3:6,*]))
+    rdata = double(transpose(reform(sdata.field1[3:6,*])))
     
     ; append data and time index
     append_array, databuf, rdata
@@ -218,13 +222,13 @@ for i=0, nsites-1 do begin
   ;=======================================
   ;=== Loop on creating tplot variable ===
   ;=======================================
-  if size(databuf,/type) eq 4 then begin
+  if size(databuf,/type) eq 5 then begin
     ; tplot variable name
     tplot_name = 'kyumag_mag_' + strlowcase(strmid(kyumag_sites[i],0,3)) + '_' + strlowcase(resolution[n]) + '_hdzf'
   
     ; for bad data
     wbad = where(databuf eq  99999.99, nbad)
-    if nbad gt 0 then databuf[wbad] = !values.f_nan
+    if nbad gt 0 then databuf[wbad] = !values.d_nan
 
     ; default limit structure
     header = create_struct(header,'acknowledgment', acknowledgstring, 'PI_NAME', 'A. Yoshikawa')

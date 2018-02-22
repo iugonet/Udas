@@ -175,11 +175,11 @@ for ii=0L,n_elements(parameters)-1 do begin
                data2 = fltarr(1,n_elements(data)-1)
                 
               ;---Get date and time information:
-               year = strmid(data(0),0,4)
-               month = strmid(data(0),5,2)
-               day = strmid(data(0),8,2)
-               hour = strmid(data(0),11,2)
-               minute = strmid(data(0),14,2) 
+               year = strmid(data[0],0,4)
+               month = strmid(data[0],5,2)
+               day = strmid(data[0],8,2)
+               hour = strmid(data[0],11,2)
+               minute = strmid(data[0],14,2) 
                  
               ;---Convert time from local time to universal time      
                time = time_double(string(year)+'-'+string(month)+'-'+string(day)+'/'+string(hour)+':'+string(minute)) - 7.0d * 3600.0d

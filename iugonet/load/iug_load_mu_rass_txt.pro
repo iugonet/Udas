@@ -175,7 +175,7 @@ for ii=0L,n_elements(parameters)-1 do begin
                data2 = fltarr(1,n_elements(data)-1)
                
               ;---Get date and time information:
-               u=strsplit(data(0),' ',/extract)
+               u=strsplit(data[0],' ',/extract)
                date=strsplit(u[0],'-',/extract)
                year = date[2]
                month = date[1]
