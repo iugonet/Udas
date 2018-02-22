@@ -34,7 +34,7 @@ if ~keyword_set(sl) then begin
    sl=0.05
 endif
 for i=0,n_elements(y0)-1 do begin
-   if finite(y0(i)) then append_array,y1,y0(i)
+   if finite(y0[i]) then append_array,y1,y0[i]
 endfor    
 
 ;Define of arrays n and y2:
@@ -53,8 +53,8 @@ while max(y_tmp) ne -1e4 do begin
    aaa=where(y_tmp eq max(y_tmp))
    bbb=n_elements(aaa)
    rank=counter+(bbb-1)/2.0
-   y2(aaa)=rank
-   y_tmp(aaa)=-1e4
+   y2[aaa]=rank
+   y_tmp[aaa]=-1e4
    counter=counter+bbb
 endwhile
 

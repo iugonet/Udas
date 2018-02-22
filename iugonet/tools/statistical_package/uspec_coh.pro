@@ -98,8 +98,8 @@ print,'main_period = '+strtrim(string(main_period*deltat),2)
 print,'--------------------------------------------------------------------'
 
 for i=0L,n_elements(result.x)-1 do begin
-  if result.cxy(i) gt 0.7 then begin
- ;   print,'coh',result.cxy(i),'     period',1/(deltat*result.f(i)),'     phase',result.lag(i)*180/!pi
+  if result.cxy[i] gt 0.7 then begin
+ ;   print,'coh',result.cxy[i],'     period',1/(deltat*result.f[i]),'     phase',result.lag[i]*180/!pi
   endif
 endfor
 
