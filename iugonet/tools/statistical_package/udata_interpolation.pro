@@ -29,6 +29,7 @@
 ;
 ;MODIFICATIONS:
 ;A. Shinbori, 20/02/2013.
+;A. Shinbori, 19/11/2018.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy:  $
@@ -198,7 +199,7 @@ for i=0L,n_elements(time_03)-1 do begin
         data_02h=data_02[where(time_02 gt time_03[i])]
         time_02h=time_02[where(time_02 gt time_03[i])]
         for j=0L,n_elements(data_02h)-1 do begin
-            if finite(data_02h[j])) then begin
+            if finite(data_02h[j]) then begin
                 inter_highD=data_02h[j]
                 inter_highT=time_02h[j]
                 break
