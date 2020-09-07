@@ -36,14 +36,19 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
       ,data_policy: { $
                   ask_nipr_syo:          0b, $
                   ask_nipr_ice:          0b, $ ;HUS, TJO
-                  ask_nipr_nor:          0b, $ ;TRO, LYR
-                  ask_nipr_spa:          0b, $ ;SPA
+                  ask_nipr_oth:          0b, $ ;TRO, LYR, KIL, KRN, TJA, SKB, SOD, SPA, MCM
                   aws_rish_id:           0b, $ ;BIK,MND,PON
                   aws_rish_ktb:          0b, $ ;KTB
                   aws_rish_sgk:          0b, $ ;SGK
                   blr_rish_ktb:          0b, $
                   blr_rish_sgk:          0b, $
                   blr_rish_srp:          0b, $
+				  brio_isee_ath:         0b, $
+				  brio_isee_kap:         0b, $
+				  brio_isee_gak:         0b, $
+				  brio_isee_hus:         0b, $
+				  brio_isee_zgn:         0b, $
+				  brio_isee_ist:         0b, $
                   eiscat:                0b, $
                   ear:                   0b, $
                   gmag_wdc_dst:          0b, $
@@ -87,6 +92,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   gmag_isee_rik:         0b, $
                   gmag_isee_kag:         0b, $
                   gmag_isee_ktb:         0b, $
+                  gmag_isee_lcl:         0b, $
                   gmag_isee_mdm:         0b, $
                   gmag_isee_tew:         0b, $
                   gmag_nipr_syo:         0b, $ ;Syowa

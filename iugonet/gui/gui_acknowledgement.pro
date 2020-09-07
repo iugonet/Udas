@@ -24,11 +24,17 @@ case instrument of
     'AllSky_Imager_Keograms': begin
         case site_or_param of
             'hus': iug_var = !iugonet.data_policy.ask_nipr_ice
-            'lyr': iug_var = !iugonet.data_policy.ask_nipr_nor
-            'tjo': iug_var = !iugonet.data_policy.ask_nipr_ice
-            'tro': iug_var = !iugonet.data_policy.ask_nipr_nor
-            'spa': iug_var = !iugonet.data_policy.ask_nipr_spa
+            'kil': iug_var = !iugonet.data_policy.ask_nipr_oth
+            'krn': iug_var = !iugonet.data_policy.ask_nipr_oth
+            'lyr': iug_var = !iugonet.data_policy.ask_nipr_oth
+            'mcm': iug_var = !iugonet.data_policy.ask_nipr_oth
+            'skb': iug_var = !iugonet.data_policy.ask_nipr_oth
+            'sod': iug_var = !iugonet.data_policy.ask_nipr_oth
+            'spa': iug_var = !iugonet.data_policy.ask_nipr_oth
             'syo': iug_var = !iugonet.data_policy.ask_nipr_syo
+            'tja': iug_var = !iugonet.data_policy.ask_nipr_oth
+            'tjo': iug_var = !iugonet.data_policy.ask_nipr_ice
+            'tro': iug_var = !iugonet.data_policy.ask_nipr_oth
         endcase
     end
     'Automatic_Weather_Station': begin
@@ -45,6 +51,16 @@ case instrument of
             'ktb': iug_var = !iugonet.data_policy.blr_rish_ktb
             'sgk': iug_var = !iugonet.data_policy.blr_rish_sgk
             'srp': iug_var = !iugonet.data_policy.blr_rish_srp
+        endcase
+    end   
+    'Broadbeam_Riometer': begin
+        case site_or_param of
+            'ath': iug_var = !iugonet.data_policy.brio_isee_ath
+            'kap': iug_var = !iugonet.data_policy.brio_isee_kap
+            'gak': iug_var = !iugonet.data_policy.brio_isee_gak
+            'hus': iug_var = !iugonet.data_policy.brio_isee_hus
+            'zgn': iug_var = !iugonet.data_policy.brio_isee_zgn
+            'ist': iug_var = !iugonet.data_policy.brio_isee_ist
         endcase
     end   
     'EISCAT_radar'               : iug_var = !iugonet.data_policy.eiscat
@@ -192,6 +208,7 @@ case instrument of
                     'rik': iug_var = !iugonet.data_policy.gmag_isee_rik
                     'kag': iug_var = !iugonet.data_policy.gmag_isee_kag
                     'ktb': iug_var = !iugonet.data_policy.gmag_isee_ktb
+                    'lcl': iug_var = !iugonet.data_policy.gmag_isee_lcl
                     'mdm': iug_var = !iugonet.data_policy.gmag_isee_mdm
                     'tew': iug_var = !iugonet.data_policy.gmag_isee_tew
                 endcase
@@ -297,11 +314,17 @@ endif else begin
             'AllSky_Imager_Keograms': begin
                 case site_or_param of
                     'hus': !iugonet.data_policy.ask_nipr_ice = iug_var
-                    'lyr': !iugonet.data_policy.ask_nipr_nor = iug_var
-                    'tjo': !iugonet.data_policy.ask_nipr_ice = iug_var
-                    'tro': !iugonet.data_policy.ask_nipr_nor = iug_var
-                    'spa': !iugonet.data_policy.ask_nipr_spa = iug_var
+                    'kil': !iugonet.data_policy.ask_nipr_oth = iug_var
+                    'krn': !iugonet.data_policy.ask_nipr_oth = iug_var
+                    'lyr': !iugonet.data_policy.ask_nipr_oth = iug_var
+                    'mcm': !iugonet.data_policy.ask_nipr_oth = iug_var
+                    'skb': !iugonet.data_policy.ask_nipr_oth = iug_var
+                    'sod': !iugonet.data_policy.ask_nipr_oth = iug_var
+                    'spa': !iugonet.data_policy.ask_nipr_oth = iug_var
                     'syo': !iugonet.data_policy.ask_nipr_syo = iug_var
+                    'tja': !iugonet.data_policy.ask_nipr_oth = iug_var
+                    'tjo': !iugonet.data_policy.ask_nipr_ice = iug_var
+                    'tro': !iugonet.data_policy.ask_nipr_oth = iug_var
                 endcase
             end
             'Automatic_Weather_Station': begin
@@ -318,6 +341,16 @@ endif else begin
                     'ktb': !iugonet.data_policy.blr_rish_ktb = iug_var
                     'sgk': !iugonet.data_policy.blr_rish_sgk = iug_var
                     'srp': !iugonet.data_policy.blr_rish_srp = iug_var
+                endcase
+            end
+            'Broadbeam_Riometer': begin
+                case site_or_param of
+                    'ath': !iugonet.data_policy.brio_isee_ath = iug_var
+                    'kap': !iugonet.data_policy.brio_isee_kap = iug_var
+                    'gak': !iugonet.data_policy.brio_isee_gak = iug_var
+                    'hus': !iugonet.data_policy.brio_isee_hus = iug_var
+                    'zgn': !iugonet.data_policy.brio_isee_zgn = iug_var
+                    'ist': !iugonet.data_policy.brio_isee_ist = iug_var
                 endcase
             end
             'EISCAT_radar'                  : !iugonet.data_policy.eiscat = iug_var

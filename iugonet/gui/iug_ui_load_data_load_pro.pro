@@ -266,6 +266,16 @@ pro iug_ui_load_data_load_pro,    $
           endelse
       end
 
+      ;----- Broadbeam_Riometer ----;
+      'Broadbeam_Riometer' : begin
+          erg_load_isee_brio, site=site_or_param, trange = timeRange
+          if parameters[0] eq '*' then begin
+              par_names=tnames('isee_brio*_*_*_*')
+          endif else begin
+              par_names=tnames('isee_brio*_*_*_'+parameters)
+          endelse
+      end
+
       ;----- Imaging_Riometer ----;
       'Imaging_Riometer' : begin
           freq=strmid(datatype,0,2)
