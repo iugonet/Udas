@@ -23,6 +23,7 @@
 ;   Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
 ; :HISTORY: 
 ;   2011/12/21: Created
+;   2020/11/04: Modified by: Y.-M. Tanaka (ytanaka at nipr.ac.jp)
 ; 
 ;-
 pro iug_init, reset=reset

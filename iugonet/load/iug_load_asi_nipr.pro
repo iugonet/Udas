@@ -30,6 +30,7 @@
 ;                 trange=['2012-01-22/20:30','2012-01-22/21:00']
 ;
 ; Written by Y.-M. Tanaka, July, 2014 (ytanaka at nipr.ac.jp)
+; Modified by Y.-M. Tanaka, November, 2020 (ytanaka at nipr.ac.jp)
 ;-
 
 ;************************************************

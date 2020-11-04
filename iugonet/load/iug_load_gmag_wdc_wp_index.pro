@@ -28,10 +28,10 @@
 ;ACKNOWLEDGMENT:
 ;
 ;
-; $LastChangedBy: $
-; $LastChangedDate: $
-; $LastChangedRevision: $
-; $URL: $
+; $LastChangedBy: nikos $
+; $LastChangedDate: 2018-08-01 11:03:38 -0700 (Wed, 01 Aug 2018) $
+; $LastChangedRevision: 25538 $
+; $URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/spdsoft/tags/spedas_4_0/projects/iugonet/load/iug_load_gmag_wdc_wp_index.pro $
 ;-
 
 ;**************************

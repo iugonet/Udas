@@ -20,10 +20,10 @@
 ; :HISTORY:
 ;    2014/08/12: Created
 ;
-; $LastChangedBy: $
-; $LastChangedDate: $
-; $LastChangedRevision: $
-; $URL: $
+; $LastChangedBy: nikos $
+; $LastChangedDate: 2018-08-01 11:03:38 -0700 (Wed, 01 Aug 2018) $
+; $LastChangedRevision: 25538 $
+; $URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/spdsoft/tags/spedas_4_0/projects/iugonet/plot/map2d/map2d_grid.pro $
 ;-
 PRO map2d_grid, dlat=dlat, dlon=dlon, color=color, linethick=linethick
     

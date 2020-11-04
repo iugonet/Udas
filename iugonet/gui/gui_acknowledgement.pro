@@ -11,7 +11,8 @@
 ;                        site_or_param=site_or_param, $
 ;                        par_names=par_names
 ;
-; Written by: Y.-M. Tanaka, May 11, 2012 (ytanaka at nipr.ac.jp)
+; Written  by: Y.-M. Tanaka, May 11, 2012 (ytanaka at nipr.ac.jp)
+; Modified by: Y.-M. Tanaka, Nov  4, 2020 (ytanaka at nipr.ac.jp)
 ;-
 
 function gui_acknowledgement, instrument=instrument, datatype=datatype, $

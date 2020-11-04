@@ -7,7 +7,7 @@
 ;
 ;HISTORY:
 ;$LastChangedBy: nikos $
-;$LastChangedDate: 2016-05-23 10:40:20 -0700 (Mon, 23 May 2016) $
+;$LastChangedDate: 2018-08-01 11:03:38 -0700 (Wed, 01 Aug 2018) $
 ;
 ;Modifications:
 ;A. Shinbori, 02/05/2011
@@ -21,6 +21,7 @@
 ;A. Shinbori, 09/10/2013
 ;A. Shinbori, 27/11/2013
 ;Y.-M. Tanaka, 05/02/2014
+;Y.-M. Tanaka, 04/11/2020
 ;
 ;--------------------------------------------------------------------------------
 pro iug_ui_load_data_event,event

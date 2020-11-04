@@ -25,10 +25,10 @@
 ; 
 ;HISTORY:
 ; 14-aug-2012, Atsuki Shinbori
-;$LastChangedBy$
-;$LastChangedDate$
-;$LastChangedRevision$
-;$URL$
+;$LastChangedBy: nikos $
+;$LastChangedDate: 2018-08-01 11:03:38 -0700 (Wed, 01 Aug 2018) $
+;$LastChangedRevision: 25538 $
+;$URL: svn+ssh://thmsvn@ambrosia.ssl.berkeley.edu/repos/spdsoft/tags/spedas_4_0/projects/iugonet/tools/statistical_package/ustrans_pwrspc.pro $
 ;-
 
 pro ustrans_pwrspc, varname, factor, newname = newname, trange = trange, help = help, verbose = verbose, samplingrate = samplingrate, maxfreq = maxfreq, minfreq = minfreq  $
