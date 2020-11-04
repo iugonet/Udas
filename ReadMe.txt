@@ -1,6 +1,6 @@
 ==================================================================
 ; UDAS plug-in software package for spedas_4_1 (UDAS ver.s4.1.2)
-;                                                    Nov. 4, 2020
+;                                                   Nov. 4, 2020
 ==================================================================
 
   UDAS is a plug-in software package for SPEDAS (Space Physics Environment 
@@ -47,6 +47,7 @@ Load procedures for IUGONET data:
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
 - iug_load_eiscat_vief  ; EISCAT ion velocity and electric field vetor data
+- iug_load_gmag_icswse_iaga ; Fluxgate magnetometer data from ICSWSE, Kyushu Univ
 - iug_load_gmag_magdas_1sec ; Alias for "erg_load_gmag_magdas_1sec"
 - iug_load_gmag_mm210   ; Alias for "erg_load_gmag_mm210"
 - iug_load_gmag_nipr    ; Fluxgate magnetometer data from NIPR
@@ -103,7 +104,7 @@ CUI:
   timespan,'2011-02-04' & iug_load_eiscat_vief
   timespan,'2006-12-01' & iug_load_gmag_mm210, site='tik'
   timespan,'2006-12-01' & iug_load_gmag_nipr, site='syo'
-  timespan,'2008-03-20' & iug_load_gmag_serc, site='anc'
+  timespan,'2013-01-01' & iug_load_gmag_icswse_iaga, site='asb'
   timespan,'2006-12-01',31 & iug_load_gmag_wdc, site='sym'
   timespan,'2006-04-17' & iug_load_gmag_nipr_induction, site='syo'
   timespan,'2008-02-28',1,/hour & iug_load_gmag_isee_induction, site='ath'
@@ -137,7 +138,8 @@ GUI:
                         ef_region       efb1p16         *       2001-07-30
                         v_region        150p8c8b2a      *       2008-03-05
                         f_region        fb1p16a         *       2001-08-05
-- geomag._fluxgate      magdas#         onw             *       2010-01-24
+- geomag._fluxgate      icswse          asb             *       2013-01-01
+                        magdas#         onw             *       2010-01-24
                         210mm#          tik             *       2006-12-01
                         ISEE#           msr             *       2006-11-20
                         WDC_kyoto       kak             *       2006-12-01
