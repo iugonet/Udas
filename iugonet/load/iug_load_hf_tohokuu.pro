@@ -87,7 +87,7 @@ for i=0,n_elements(site_code)-1 do begin
       ;--- add metadata
       gatt={Project:dlimit.cdf.gatt.project, Logical_source_description:"Jupiter's/solar wide band spectral data in HF-band", PI_name:"Atsushi Kumamoto", PI_affiliation:"Tohoku University", TEXT:"When the data is used in or contributes to a presentation or publication, you should let us know and make acknowledgement to the Planetary Plasma and Atmospheric Research Center, Tohoku University.", LINK_TEXT:"For more information, see", HTTP_LINK:"http://ariel.gp.tohoku.ac.jp/~jupiter/"}
       cdf = {filename:dlimit.cdf.filename, gatt:gatt, vname:dlimit.cdf.vname, vatt:dlimit.cdf.vatt}
-      dl =  {cdf:cdf, spec:dlimit.spec, log:dlimit.log, ysubtitle:dlimit.ysubtitle}
+      dl =  {cdf:cdf, spec:dlimit.spec, ylog:dlimit.ylog, ysubtitle:dlimit.ysubtitle}
 
       ;--- restore data
       if param[j] eq 'rh' then store_data, 'iug_iit_hf_R', data=data, dlimit=dl
