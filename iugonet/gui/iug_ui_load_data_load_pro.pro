@@ -25,7 +25,6 @@
 ;Y.-M. Tanaka, 16/08/2013
 ;A. Shinbori, 07/01/2014
 ;Y.-M. Tanaka, 05/02/2014
-;Y.-M. Tanaka, 04/11/2020
 ;-
 ;--------------------------------------------------------------------------------
 
@@ -80,16 +79,6 @@ pro iug_ui_load_data_load_pro,    $
       'Boundary_Layer_Radar' : begin          
           iug_load_blr_rish, site =site_or_param, parameter=parameters, trange = timeRange
           par_names=tnames('iug_blr_*')
-      end
-
-      ;----- Broadbeam_Riometer ----;
-      'Broadbeam_Riometer' : begin
-          erg_load_isee_brio, site=site_or_param, trange = timeRange
-          if parameters[0] eq '*' then begin
-              par_names=tnames('isee_brio*_*_*_*')
-          endif else begin
-              par_names=tnames('isee_brio*_*_*_'+parameters)
-          endelse
       end
 
       ;----- EISCAT radar -----;
@@ -249,6 +238,17 @@ pro iug_ui_load_data_load_pro,    $
           par_names=tnames('gps_ro_*_fsi_*')
         endif else begin
           par_names=tnames('gps_ro_*_fsi_'+parameters)
+        endelse
+      end
+
+      ;----- GPS_TEC ----;
+      'GPS_TEC' : begin
+        iug_load_gps_isee, datatype = datatype, trange = timeRange
+        atec_keogram_glat_glong, glong = parameters
+        if parameters[0] eq '*' then begin
+          par_names=tnames('atec_keogram_geocoord_*')
+        endif else begin
+          par_names=tnames('atec_keogram_geocoord_'+parameters)
         endelse
       end
 

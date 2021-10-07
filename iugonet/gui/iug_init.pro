@@ -23,7 +23,6 @@
 ;   Tomo Hori (E-mail: horit@stelab.nagoya-u.ac.jp)
 ; :HISTORY: 
 ;   2011/12/21: Created
-;   2020/11/04: Modified by: Y.-M. Tanaka (ytanaka at nipr.ac.jp)
 ; 
 ;-
 pro iug_init, reset=reset
@@ -37,19 +36,14 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
       ,data_policy: { $
                   ask_nipr_syo:          0b, $
                   ask_nipr_ice:          0b, $ ;HUS, TJO
-                  ask_nipr_oth:          0b, $ ;TRO, LYR, KIL, KRN, TJA, SKB, SOD, SPA, MCM
+                  ask_nipr_nor:          0b, $ ;TRO, LYR
+                  ask_nipr_spa:          0b, $ ;SPA
                   aws_rish_id:           0b, $ ;BIK,MND,PON
                   aws_rish_ktb:          0b, $ ;KTB
                   aws_rish_sgk:          0b, $ ;SGK
                   blr_rish_ktb:          0b, $
                   blr_rish_sgk:          0b, $
                   blr_rish_srp:          0b, $
-				  brio_isee_ath:         0b, $
-				  brio_isee_kap:         0b, $
-				  brio_isee_gak:         0b, $
-				  brio_isee_hus:         0b, $
-				  brio_isee_zgn:         0b, $
-				  brio_isee_ist:         0b, $
                   eiscat:                0b, $
                   ear:                   0b, $
                   gmag_wdc_dst:          0b, $
@@ -93,7 +87,6 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   gmag_isee_rik:         0b, $
                   gmag_isee_kag:         0b, $
                   gmag_isee_ktb:         0b, $
-                  gmag_isee_lcl:         0b, $
                   gmag_isee_mdm:         0b, $
                   gmag_isee_tew:         0b, $
                   gmag_nipr_syo:         0b, $ ;Syowa
@@ -181,6 +174,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   gmag_icswse_yap:       0b, $
                   gmag_icswse_zgn:       0b, $
                   gps_ro_rish:           0b, $
+                  gps_tec_isee:          0b, $
                   imag_nipr_syo:         0b, $
                   imag_nipr_ice:         0b, $
                   imag_isee:             0b, $
