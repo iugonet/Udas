@@ -59,6 +59,8 @@
 pro atec_global_2dmap, vname1, st_time = st_time, P0lat = P0lat, P0lon = P0lon, $
   plot_min_lat = plot_min_lat, plot_max_lat = plot_max_lat, plot_min_lon = plot_min_lon, $
   plot_max_lon = plot_max_lon, contour_min = contour_min, contour_max = contour_max, local_noon=local_noon
+  
+  compile_opt IDL2
 
   ;**************************
   ;****Keyword check****
@@ -83,6 +85,8 @@ pro atec_global_2dmap, vname1, st_time = st_time, P0lat = P0lat, P0lon = P0lon, 
   gps_tec_data = gps_tec.y
   Lat = gps_tec.glat
   Lon = gps_tec.glon
+  idx_tec = where(gps_tec_data lt -5.0)
+  gps_tec_data[idx_tec]=-5.0
 
   ;---Search for the time corresponding to the input start time and altitude:
   idx_time = where(abs(gps_tec_time - time_double(st_time)) eq min(abs(gps_tec_time - time_double(st_time))), cnt)
@@ -93,20 +97,17 @@ pro atec_global_2dmap, vname1, st_time = st_time, P0lat = P0lat, P0lon = P0lon, 
     min_cont= 0.0
     max_cont= 40.0
   endif else begin
-    min_cont = double(contour_min)
-    max_cont = double(contour_max)
+    min_cont = min(gps_tec_data,/nan)
+    max_cont = max(gps_tec_data,/nan)
   endelse
 
   ;--------------- Preparation for Plotting ----------------
   nclv = 60.
-  cont_level = float(indgen(nclv))*(max_cont-min_cont)/nclv+min_cont
+  cont_level = float(indgen(nclv))*(max_cont+7-min_cont)/nclv-7+min_cont
   cont_level[0] = -1.E+20
   cont_level[1] = -1.E+10
   cont_level[nclv-1] = 1.E+20
 
-  ;----Color Table----
-   loadct, 39
-  ;-----------------------
 
   ;----Get start time (year, month, day, hour, minute).----
   yyyy = strmid(st_time,0,4)
@@ -117,15 +118,15 @@ pro atec_global_2dmap, vname1, st_time = st_time, P0lat = P0lat, P0lon = P0lon, 
 
   ;------------------------------------------------ Draw a two-dimensional map of GAIA cpl data------------------------------------------------------
   ;----Set up the plot window----
-  WINDOW, 0, xsize = 800, ysize = 600, COLORS=2 ;  title = 'Plot of the GPS_TEC data',
+  WINDOW, 0, xsize = 1200, ysize = 600, COLORS=2 ;  title = 'Plot of the GPS_TEC data',
   white=!D.N_COLORS-1
   PLOT, FINDGEN(20), COLOR=white
 
   ;----Map set----
    map_set, P0lat , P0lon , 0, /cylindrical, limit = [plot_min_lat , plot_min_lon, plot_max_lat, plot_Max_lon], /NoErase, $
-    charsize = 2, latdel = 15, londel = 15, POSITION = [0.1, 0.23, 0.9, 0.87]
-  xyouts, 0.5, 0.95, time_string(gps_tec_time[idx_time[0]]), $
-    alignment = 0.5, orientation = 0., charsize = 2, color = 0, /NORMAL
+    charsize = 1.5, latdel = 15, londel = 15, POSITION = [0.1, 0.13, 0.85, 0.87]
+   xyouts, 0.5, 0.95, time_string(gps_tec_time[idx_time[0]]), $
+    alignment = 0.5, orientation = 0., charsize = 1.5, color = 0, /NORMAL
 
   ;----Contour Plot ----
   dum_gps_tec_data = reform(gps_tec_data[idx_time[0],*,*])
@@ -146,16 +147,23 @@ pro atec_global_2dmap, vname1, st_time = st_time, P0lat = P0lat, P0lon = P0lon, 
 
   ;-----Plot the high resokution CONTINENTS----
   map_continents, /coasts,/CONTINENTS;,/hires
-  Map_Grid, /Box_Axes, Charsize = 2.0, GLinestyle = 1
+  Map_Grid, /Box_Axes, Charsize = 1.5, GLinestyle = 1
 
-  ;-----Draw the colar bar------
-  colorbar, NColors=255, charsize = 1.0, $
-    Title =ALIMITS.ztitle, $
-    MAXRANGE = max_cont, $
-    MINRANGE = min_cont, $
-    COLOR = 0, $
-    DIVISIONS = 4, $
-    ;FORMAT = '(e10.1)', $
-    Position=[0.1, 0.07, 0.9, 0.11]
+  ;-----Draw the colar bar------ 
+  ; colorbar, NCOLORS = 255, CHARSIZE = 1.0, $
+  ;  TITLE = ALIMITS.ztitle, $
+  ;  MAXRANGE = max_cont, $
+  ;  MINRANGE = min_cont, $
+  ;  COLOR = 0, $
+  ;  DIVISIONS = 4, $
+  ;  ;FORMAT = '(e10.1)', $
+  ;  POSITION = [0.85, 0.23, 0.95, 0.87]
+    
+    P = [0.9, 0.13, 0.925, 0.87]
+    
+    draw_color_scale,range=[min_cont, max_cont],log=zlog,charsize=1.25,position=p,title=ztitle,yticks=zticks,brange=[7,254],$
+      offset=zoffset,ygridstyle=zgridstyle,yminor=zminor,ythick=zthick,ytickformat=ztickformat,ytickinternal=ztickinterval,$
+      yticklayout=zticklayout,yticklen=zticklen,ytickname=ztickname,ytickunits=ztickunits,ytickv=ztickv,ytitle=ALIMITS.ztitle
+      
 
 end
