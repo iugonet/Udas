@@ -87,6 +87,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   gmag_isee_rik:         0b, $
                   gmag_isee_kag:         0b, $
                   gmag_isee_ktb:         0b, $
+                  gmag_isee_lcl:         0b, $
                   gmag_isee_mdm:         0b, $
                   gmag_isee_tew:         0b, $
                   gmag_nipr_syo:         0b, $ ;Syowa

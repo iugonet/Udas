@@ -192,6 +192,7 @@ case instrument of
                     'rik': iug_var = !iugonet.data_policy.gmag_isee_rik
                     'kag': iug_var = !iugonet.data_policy.gmag_isee_kag
                     'ktb': iug_var = !iugonet.data_policy.gmag_isee_ktb
+                    'lcl': iug_var = !iugonet.data_policy.gmag_isee_lcl
                     'mdm': iug_var = !iugonet.data_policy.gmag_isee_mdm
                     'tew': iug_var = !iugonet.data_policy.gmag_isee_tew
                 endcase
@@ -466,6 +467,7 @@ endif else begin
                             'rik': !iugonet.data_policy.gmag_isee_rik = iug_var
                             'kag': !iugonet.data_policy.gmag_isee_kag = iug_var
                             'ktb': !iugonet.data_policy.gmag_isee_ktb = iug_var
+                            'lcl': !iugonet.data_policy.gmag_isee_lcl = iug_var
                             'mdm': !iugonet.data_policy.gmag_isee_mdm = iug_var
                             'tew': !iugonet.data_policy.gmag_isee_tew = iug_var
                         endcase

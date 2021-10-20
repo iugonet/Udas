@@ -433,7 +433,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
                                  'ktb','ktn','lmt','lnp','mgd','mcq','msr','mut','onw', $
                                  'ppi','ptk','ptn','rik','tik','wep','wew','wtk','yak', $
                                  'yap','ymk','zgn','zyk'])
-  (*paramArray[5])[3] = ptr_new(['*(all)','msr','rik','kag','ktb','mdm','tew'])
+  (*paramArray[5])[3] = ptr_new(['*(all)','msr','rik','kag','ktb','lcl','mdm','tew'])
   (*paramArray[5])[4] = ptr_new(['*(all)','aaa','aae','abg','abk','abn','agn','aia','ale','alm','aml','ams',$
                                  'amt','amu','anc','ann','api','aqu','arc','are','ark','ars','art','asc','ash','aso','asp',$
                                  'bag','bde','bdv','bel','bfe','bfo','bgy','bji','bjn','blc','blt','bmt','bng','bou',$
@@ -458,7 +458,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
                                  'vsk','vss','wat','whn','whs','wik','wil','wit','wmq','wng','yak','ycb','ykc','yss'])
   (*paramArray[5])[5] = ptr_new(['*(all)','aed','amb','hus','h57','h68','ihd','isa','skl','srm','syo','tjo'])
   (*paramArray[6])[0] = ptr_new(['*(all)','aed','hus','isa','syo','tjo'])
-  (*paramArray[6])[1] = ptr_new(['*(all)','ath','mgd','ptk','msr','sta','gak','kap','zgn','hus'])
+  (*paramArray[6])[1] = ptr_new(['*(all)','ath','gak','hus','ist','kap','lcl','mgd','msr','nai','ptk','rik','sta','zgn'])
   (*paramArray[7])[0] = ptr_new(['*(all)','WDC_kyoto'])
   (*paramArray[7])[1] = ptr_new(['*(all)','WDC_kyoto'])
   (*paramArray[7])[2] = ptr_new(['*(all)','WDC_kyoto'])
@@ -572,7 +572,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*param2Array[5])[0] = ptr_new(['*','1sec','1min'])
   (*param2Array[5])[1] = ptr_new(['*','1sec'])
   (*param2Array[5])[2] = ptr_new(['*','1sec','1min','1h'])
-  (*param2Array[5])[3] = ptr_new(['*','1sec','1min','1h'])
+  (*param2Array[5])[3] = ptr_new(['*','64hz','1sec','1min','1h'])
   (*param2Array[5])[4] = ptr_new(['*','min','hour'])
   (*param2Array[5])[5] = ptr_new(['*','1sec'])  
   (*param2Array[6])[0] = ptr_new(['*'])
