@@ -24,6 +24,7 @@
 ;
 ;CHANGELOG:
 ;  21-March-2017, Imajo. first version.
+;  20-Octber-2021, Imajo. first modify remote data location.
 ;
 ;ACKNOWLEDGMENT:
 ;
@@ -74,7 +75,7 @@ pro iug_load_gmag_wdc_wp_index,trange = trange, $
     ; define remote and local path information
     source = file_retrieve(/struct)
     source.local_data_dir = root_data_dir() + 'geom_indices/kyoto/Wp/'
-    source.remote_data_dir = 'http://s-cubed.info/data/'
+    source.remote_data_dir = 'https://www.isee.nagoya-u.ac.jp/~nose.masahito/s-cubed/data/'
 
     if keyword_set(downloadonly) then source.downloadonly=1
     if keyword_set(no_server)    then source.no_server=1
