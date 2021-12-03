@@ -24,6 +24,7 @@
 ; :HISTORY: 
 ;   2011/12/21: Created
 ;   2020/11/04: Modified by: Y.-M. Tanaka (ytanaka at nipr.ac.jp)
+;   2021/12/03: Modified by: Y.-M. Tanaka (ytanaka at nipr.ac.jp)
 ; 
 ;-
 pro iug_init, reset=reset
@@ -185,6 +186,7 @@ if (not keyword_set(exists)) or (keyword_set(reset)) then begin
                   imag_nipr_syo:         0b, $
                   imag_nipr_ice:         0b, $
                   imag_isee:             0b, $
+                  imag_hokudai:          0b, $
                   hf_tohokuu:            0b, $
                   iprt:                  0b, $
                   irio_nipr_syo:         0b, $

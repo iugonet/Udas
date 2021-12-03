@@ -14,6 +14,7 @@
 ;  
 ;Modifications:
 ;  Y.-M. Tanaka, 11/05/2012
+;  Y.-M. Tanaka, 03/12/2021
 ;-
 
 function show_acknowledgement, instrument=instrument, datatype=datatype, $
@@ -43,7 +44,7 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
                 'Rules of the Road:',str.cdf.gatt.text, $
                 '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
-  endif else if datatype eq 'NIPR#' then begin
+  endif else if (datatype eq 'NIPR#') or (datatype eq 'Hokkaido') then begin
      theMessage = [ $
                 str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
                 'Information about '+str.cdf.gatt.station_code, '', $

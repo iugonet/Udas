@@ -1,6 +1,6 @@
 ==================================================================
-; UDAS plug-in software package for spedas_5_0
-;                                                   Nov. 21, 2021
+; UDAS plug-in software package for spedas_5_0_1
+;                                                   Dec. 3, 2021
 ==================================================================
 
   UDAS is a plug-in software package for SPEDAS (Space Physics Environment 
@@ -48,6 +48,7 @@ Load procedures for IUGONET data:
 - iug_load_ear          ; Equatorial Atmospheric Radar (EAR) data from RISH
 - iug_load_eiscat       ; EISCAT radar data
 - iug_load_eiscat_vief  ; EISCAT ion velocity and electric field vetor data
+- iug_load_elf_hokudai  ; 400Hz induction magnetometer data from Hokkaido Univ
 - iug_load_gaia_cpl_nc  ; GAIA model (cpl part) data
 - iug_load_gaia_gcm_nc  ; GAIA model (gcm part) data
 - iug_load_gmag_icswse_iaga ; Fluxgate magnetometer data from ICSWSE, Kyushu Univ

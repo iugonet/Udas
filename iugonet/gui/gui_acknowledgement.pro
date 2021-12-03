@@ -13,6 +13,7 @@
 ;
 ; Written  by: Y.-M. Tanaka, May 11, 2012 (ytanaka at nipr.ac.jp)
 ; Modified by: Y.-M. Tanaka, Nov  4, 2020 (ytanaka at nipr.ac.jp)
+; Modified by: Y.-M. Tanaka, Dec  3, 2021 (ytanaka at nipr.ac.jp)
 ;-
 
 function gui_acknowledgement, instrument=instrument, datatype=datatype, $
@@ -245,6 +246,9 @@ case instrument of
             end
             'ISEE#': begin
                 iug_var = !iugonet.data_policy.imag_isee
+            end
+            'Hokkaido': begin
+                iug_var = !iugonet.data_policy.imag_hokudai
             end
         endcase
     end
@@ -535,6 +539,9 @@ endif else begin
                     end
                     'ISEE#': begin
                         !iugonet.data_policy.imag_isee = iug_var
+                    end
+                    'Hokkaido': begin
+                        !iugonet.data_policy.imag_hokudai = iug_var
                     end
                 endcase
             end

@@ -22,6 +22,7 @@
 ;A. Shinbori, 27/11/2013
 ;Y.-M. Tanaka, 05/02/2014
 ;Y.-M. Tanaka, 04/11/2020
+;Y.-M. Tanaka, 03/12/2021
 ;
 ;--------------------------------------------------------------------------------
 pro iug_ui_load_data_event,event
@@ -343,7 +344,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   typeArray[4] = ptr_new(['altitude_prof','latitude_prof','longitude_prof','Vi_E_vectors'])
   typeArray[5] = ptr_new(['troposphere','e_region','ef_region','v_region','f_region'])
   typeArray[6] = ptr_new(['icswse','magdas#','210mm#','ISEE#','WDC_kyoto','NIPR#'])
-  typeArray[7] = ptr_new(['NIPR#','ISEE#'])
+  typeArray[7] = ptr_new(['NIPR#','ISEE#','Hokkaido'])
   typeArray[8] = ptr_new(['Dst_index','AE_index','ASY_index','Wp_index'])
   typeArray[9] = ptr_new(['troposphere'])
   typeArray[10] = ptr_new(['atec'])
@@ -388,7 +389,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   paramArray[4] = ptr_new(ptrarr(4))
   paramArray[5] = ptr_new(ptrarr(5))
   paramArray[6] = ptr_new(ptrarr(6))
-  paramArray[7] = ptr_new(ptrarr(2))
+  paramArray[7] = ptr_new(ptrarr(3))
   paramArray[8] = ptr_new(ptrarr(4))
   paramArray[9] = ptr_new(ptrarr(1))
   paramArray[10] = ptr_new(ptrarr(1))
@@ -466,6 +467,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*paramArray[6])[5] = ptr_new(['*(all)','aed','amb','hus','h57','h68','ihd','isa','skl','srm','syo','tjo'])
   (*paramArray[7])[0] = ptr_new(['*(all)','aed','isa','syo','tjo'])
   (*paramArray[7])[1] = ptr_new(['*(all)','ath','gak','hus','kap','lcl','mgd','msr','nai','ptk','rik','sta','zgn'])
+  (*paramArray[7])[2] = ptr_new(['*(all)','syo'])
   (*paramArray[8])[0] = ptr_new(['*(all)','WDC_kyoto'])
   (*paramArray[8])[1] = ptr_new(['*(all)','WDC_kyoto'])
   (*paramArray[8])[2] = ptr_new(['*(all)','WDC_kyoto'])
@@ -542,7 +544,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   param2Array[4] = ptr_new(ptrarr(4))
   param2Array[5] = ptr_new(ptrarr(5))
   param2Array[6] = ptr_new(ptrarr(6))
-  param2Array[7] = ptr_new(ptrarr(2))
+  param2Array[7] = ptr_new(ptrarr(3))
   param2Array[8] = ptr_new(ptrarr(4))
   param2Array[9] = ptr_new(ptrarr(1))
   param2Array[10] = ptr_new(ptrarr(1))
@@ -587,6 +589,7 @@ pro iug_ui_load_data,tabid,loadedData,historyWin,statusBar,treeCopyPtr,timeRange
   (*param2Array[6])[5] = ptr_new(['*','1sec'])  
   (*param2Array[7])[0] = ptr_new(['*'])
   (*param2Array[7])[1] = ptr_new(['*'])
+  (*param2Array[7])[2] = ptr_new(['*'])
   (*param2Array[8])[0] = ptr_new(['*','final','prov'])
   (*param2Array[8])[1] = ptr_new(['*','min','hour','prov_min','prov_hour'])
   (*param2Array[8])[2] = ptr_new(['*','asy','sym'])

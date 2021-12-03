@@ -26,6 +26,7 @@
 ;A. Shinbori, 07/01/2014
 ;Y.-M. Tanaka, 05/02/2014
 ;Y.-M. Tanaka, 04/11/2020
+;Y.-M. Tanaka, 03/12/2021
 ;-
 ;--------------------------------------------------------------------------------
 
@@ -237,6 +238,10 @@ pro iug_ui_load_data_load_pro,    $
                   'ISEE#' : begin
                       erg_load_gmag_isee_induction, trange = timeRange, site = site_or_param
                       par_names=tnames('isee_induction_*')
+                  end
+                  'Hokkaido' : begin
+                      iug_load_elf_hokudai, trange = timeRange, site = site_or_param
+                      par_names=tnames('hokudai_*')
                   end
               endcase
           endelse
