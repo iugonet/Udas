@@ -1,4 +1,4 @@
-;+
+thm;+
 ;NAME:
 ;  show_acknowledgement
 ;
@@ -44,7 +44,7 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'Affiliations:', str.cdf.gatt.pi_affiliation, '', '', $
                 'Rules of the Road:',str.cdf.gatt.text, $
                 '', str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK ] 
-  endif else if (datatype eq 'NIPR#') or (datatype eq 'Hokkaido') then begin
+  endif else if (datatype eq 'NIPR#') then begin
      theMessage = [ $
                 str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
                 'Information about '+str.cdf.gatt.station_code, '', $
@@ -53,7 +53,7 @@ function show_acknowledgement, instrument=instrument, datatype=datatype, $
                 'Rules of the Road: ',str.cdf.gatt.rules_of_use, '', $
                 str.cdf.gatt.LINK_TEXT, str.cdf.gatt.HTTP_LINK]
   endif else if (datatype eq '210mm#') or (datatype eq 'ISEE#') or $
-     (datatype eq 'magdas#') then begin
+     (datatype eq 'magdas#') or (datatype eq 'Hokkaido') then begin
      theMessage = [ $
                 str.cdf.gatt.LOGICAL_SOURCE_DESCRIPTION, '', $
                 'Information about '+str.cdf.gatt.station_code, '', $

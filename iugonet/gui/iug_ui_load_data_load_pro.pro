@@ -470,6 +470,9 @@ pro iug_ui_load_data_load_pro,    $
               endif else if (instrument eq 'geomagnetic_field_induction') and $
                   (datatype eq 'ISEE#') then begin
                   site_name2 = site_name[4]
+              endif else if (instrument eq 'geomagnetic_field_induction') and $
+                  (datatype eq 'Hokkaido') then begin
+                  site_name2 = site_name[-1]
               endif else if (instrument eq 'Middle_Upper_atomosphere_radar') then begin
                   if n_elements(site_name) eq 5 then begin 
                      if site_name[4] eq 'org' then site_name2 = 'meso(org)'
