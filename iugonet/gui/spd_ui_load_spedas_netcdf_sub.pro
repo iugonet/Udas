@@ -75,22 +75,34 @@ function spd_ui_load_spedas_netcdf_sub, netCDFi_DIMS, netCDFi_VARS
   COMPILE_OPT idl2, hidden
 
   help_text = hash()  
-  help_text['HELP'] = ['(1) Name of time dimension', $
-    'Please select the name of time dimension, ', $
-    'which was defined in the NetCDF format.', $
+  help_text['HELP'] = ['Select Parameters:', $
+	'This window opens when you select a netCDF file including ', $
+    'variables which are more than three dimension.', $
+    ' ', $
+    '(1) Name of time dimension', $
+    'Please select the name of time dimension, which was defined ', $
+	'in the NetCDF format. This is used for time of tplot variables ', $
+    '(element of "x" in SPEDAS data model). All dimensions in a ', $
+    'netCDF file are listed in this box. The default value is "time"' , $
+    'if a netCDF file has a dimension named as "time".', $
     ' ', $
     '(2) Variable name for the time dimension', $
-    'Please select the variable name for the time dimension, ', $
-	'which was defined in the NetCDF format.', $
+    'Please select the variable name for the time dimension, which ', $
+	'was defined in the NetCDF format. All variables in a netCDF file ', $
+    'are listed in this box. The default value is "time" if a netCDF ', $
+    'file has a variable named as "time".', $
     ' ', $
-    '(3) 2nd dimension for 2D or 3D data', $
-    'Please select the name of the 2nd dimension for 2D or 3D data ', $
-    'other than the time dimension (for exmaple, range, height, ', $
-    'frequency, etc.), which was defined in the NetCDF format.', $
+    '(3) 2nd dimension for 3D data', $
+    'Please select the name of the 2nd dimension for 3D data other than ', $
+    'the time dimension (for exmaple, range, height, frequency, etc.), ', $
+    'which was defined in the NetCDF format. This is used for v of ', $
+    'tplot variables (element of "v" in SPEDAS data model). ', $
+	'The default value is "None".', $
     ' ', $
     '(4) Variable name for the 2nd dimension', $
-    'Please select the variable name for the 2nd dimension,', $
-    'which was defined in the NetCDF format.']  
+    'Please select the variable name for the 2nd dimension (e.g., range, ', $
+	'height, frequency, etc.), which was defined in the NetCDF format.', $
+    'The default value is "None".']  
 
   ; Widget master :: topbase
   ;if KEYWORD_SET(debug) then begin
@@ -121,7 +133,7 @@ function spd_ui_load_spedas_netcdf_sub, netCDFi_DIMS, netCDFi_VARS
   list_timeDim = WIDGET_LIST(base_up_timeDim, SCR_YSIZE=120, $
     VALUE=netCDFi_DIMS, UVALUE='LIST_TIME_DIMENSION', UNAME='LIST_TIME_DIMENSION')
   base_up_vDim = WIDGET_BASE(base_up, /COLUMN, XSIZE=w_xs/2-10)
-  label_vDim = WIDGET_LABEL(base_up_vDim, VALUE='(3) 2nd dimension for 2D or 3D data: ', /ALIGN_LEFT)
+  label_vDim = WIDGET_LABEL(base_up_vDim, VALUE='(3) 2nd dimension for 3D data: ', /ALIGN_LEFT)
   list_vDim = WIDGET_LIST(base_up_vDim, SCR_YSIZE=120, $
     VALUE=netCDFi_DIMS_WithNone, UVALUE='LIST_V_DIMENSION', UNAME='LIST_V_DIMENSION')
 
