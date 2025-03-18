@@ -41,8 +41,8 @@
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
 ;Updated:  Yukinobu KOYAMA,  Oct 21, 2011
-;Last Updated Shun Imajo, Apr, 26, 2017
-;-
+;Updated Shun Imajo, Apr, 26, 2017
+;Updated by:  Shun Imajo, Mar 18, 2025
 
 pro iug_load_gmag_wdc, site=site, $
                        trange=trange, $
@@ -69,7 +69,7 @@ pro iug_load_gmag_wdc, site=site, $
      if(~keyword_set(level)) then begin
         if strlowcase(wdc_sites[i]) eq 'dst' or $
            strlowcase(wdc_sites[i]) eq 'ae' then begin
-           level_in = ['final','provisional']
+           level_in = ['final','provisional','real']
         endif else begin
            level_in = 'final'
         endelse

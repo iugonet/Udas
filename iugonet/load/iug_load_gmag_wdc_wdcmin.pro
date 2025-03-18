@@ -26,7 +26,8 @@
 ;Updated by:  Daiki Yoshida,  Jan 11, 2011
 ;Updated by:  Daiki Yoshida,  Mar 1, 2011
 ;Updated by:  Yukinobu KOYAMA, Jan 21, 2011
-;Last Updated by:  Shun Imajo, Apr 26, 2017
+;Updated by:  Shun Imajo, Apr 26, 2017
+;Updated by:  Shun Imajo, Mar 18, 2025
 ;-
 
 pro iug_load_gmag_wdc_wdcmin, $
@@ -95,7 +96,7 @@ pro iug_load_gmag_wdc_wdcmin, $
     source = file_retrieve(/struct)
     source.verbose = verbose
     source.local_data_dir = root_data_dir() + 'iugonet/wdc_kyoto/geomag/'
-    source.remote_data_dir = 'http://wdc-data.iugonet.org/data/'
+    source.remote_data_dir = 'https://wdc-data.iugonet.org/data/'
     if(keyword_set(no_download)) then source.no_server = 1
 
     ; download data
@@ -304,7 +305,7 @@ pro iug_load_gmag_wdc_wdcmin, $
       options, $
         tplot_name, $
         ytitle = tplot_ytitle, ysubtitle = tplot_ysubtitle, $
-        labels = tplot_labels, colors = tplot_colors
+        labels = tplot_labels, colors = tplot_colors,labflag = 1
 
 
     print, '**************************************************'

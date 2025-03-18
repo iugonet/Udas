@@ -17,6 +17,7 @@
 ;
 ;Written by:  Daiki Yoshida,  Aug 2010
 ;Updated by:  Daiki Yoshida,  Sep 14, 2010
+;Updated by:  Shun Imajo, Mar 18, 2025
 ;
 ;-
 
@@ -82,6 +83,15 @@ function iug_load_gmag_wdc_relpath, sname = sname, $
            append_array, suffix, replicate('',5)
         endif
      endif
+     if level eq 'all' or strmid(level,0,4) eq 'real' then begin
+         if res eq 'min' then begin
+            append_array, dir, replicate(res+'/index/rtae/',4)
+            append_array, prefix, ['ae', 'au', 'al', 'ao']
+            append_array, suffix, replicate('',4)
+            dirformat = 'YYYY/MM/DD/'
+            fileformat = 'yyMMDD'
+         endif
+      endif
   endif else if strlowcase(sname) eq 'sym' or strlowcase(sname) eq 'asy' then begin
      append_array, dir, res+'/index/asy/'
      append_array, prefix, 'asy'

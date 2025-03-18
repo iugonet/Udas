@@ -131,6 +131,9 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     if strcmp(level, 'prov', 4, /fold_case) eq 1 then begin
       tplot_name = tplot_name + '_prov'
       tplot_ytitle = 'Prov. ' + tplot_ytitle
+    endif else if strcmp(level, 'real', 4, /fold_case) eq 1 then begin
+      tplot_name = tplot_name + '_real'
+      tplot_ytitle = 'Realtime ' + tplot_ytitle
     endif
     
     if res eq 'min' then begin
@@ -203,6 +206,10 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
      if element[i] eq 'Y' then tplot_colors[i]=5
      if element[i] eq 'F' then tplot_colors[i]=0
      if element[i] eq 'I' then tplot_colors[i]=1
+     if element[i] eq 'U' then tplot_colors[i]=2
+     if element[i] eq 'L' then tplot_colors[i]=4
+     if element[i] eq 'E' then tplot_colors[i]=6
+     if element[i] eq 'O' then tplot_colors[i]=0
   endfor
   
 end
