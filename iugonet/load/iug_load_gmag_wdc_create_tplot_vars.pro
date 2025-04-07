@@ -19,6 +19,7 @@
 ;Updated by:  Daiki Yoshida,  Jan 11, 2011
 ;Updated by:  Yukinobu KOYAMA, Jan 21, 2012
 ;Updated by:  Shun Imajo, Aug 23,2021
+;Updated by:  Shun Imajo, Mar 18,2025
 ;-
 
 pro iug_load_gmag_wdc_create_tplot_vars, $
