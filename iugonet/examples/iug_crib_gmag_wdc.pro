@@ -9,6 +9,7 @@
 ;Written by: Y. KOYAMA, Aug 9,2011
 ;Last Updated: Y. KOYAMA, Oct 6,2011
 ;Last Updated: M. NOSE, Apr 27, 2017
+; Last Updated: S. IMAJO, Apr 7, 2025
 ;-
 
 ;Initialize
@@ -34,5 +35,15 @@ tplot_names
 
 ;Plot data
 tplot,['wdc_mag_ae_prov_1min','wdc_mag_dst','wdc_mag_Wp_index']
+
+;AE realtime data
+;Set the date and time for loading data
+timespan, '2024-12-01',1
+
+;Load AE index 
+iug_load_gmag_wdc, site='ae', resolution='min'
+
+;Plot data
+tplot,['wdc_mag_ae_real_1min']
 
 end
