@@ -96,7 +96,8 @@ nsites = n_elements(kyumag_sites)
 source = file_retrieve(/struct)
 source.verbose = verbose
 source.local_data_dir = root_data_dir() + 'iugonet/icswse/magnetometer/iaga/'
-source.remote_data_dir = 'http://data.icswse.kyushu-u.ac.jp/gmag/data/'
+; Moved 2026 from data.icswse to i-SPES (serves only to the SPEDAS client UA).
+source.remote_data_dir = 'https://data.i-spes.kyushu-u.ac.jp/gmag/data/'
 
 if keyword_set(downloadonly) then source.downloadonly=1
 if keyword_set(no_server)    then source.no_server=1
