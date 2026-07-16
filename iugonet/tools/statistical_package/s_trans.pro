@@ -349,14 +349,14 @@ endif else begin  ; calculate complex ST
 endelse
 
 if keyword_set(maskedges) then begin
-   if maskedges eq 1 then maskthreshold=0.05
-   if maskedges gt 0 and maskedges lt 1 then maskthreshold=maskedges
-   if maskedges gt 1 and maskedges le 100 then maskthreshold=float(maskedges)/100. $
+   if maskedges eq 1 then maskthreshold=0.05 $
+   else if maskedges gt 0 and maskedges lt 1 then maskthreshold=maskedges $
+   else if maskedges gt 1 and maskedges le 100 then maskthreshold=float(maskedges)/100. $
    else  maskthreshold=0.05
    edgets = findgen(length)/length
    st = s_trans(edgets,/abs)
    mask=where(st gt maskthreshold,maskcount) ; 5 % is good = 0.05 based on snooping around
-   loc[mask] = 0
+   if maskcount gt 0 then loc[mask] = 0
 endif
 
 if keyword_set(samplingrate) then begin  ; make structure

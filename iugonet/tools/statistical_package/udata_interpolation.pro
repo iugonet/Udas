@@ -29,6 +29,7 @@
 ;
 ;MODIFICATIONS:
 ;A. Shinbori, 20/02/2013.
+;S. Imajo, 15/07/2026.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -58,14 +59,12 @@ data_02=d2.y
 
 ;Exchange of two data sets:
 if keyword_set(reverse) then begin
-    if(rev eq 1) then begin
-        tmpD=data_01
-        tmpT=time_01
-        data_01=data_02
-        time_01=time_02
-        data_02=tmpD
-        time_02=tmpT
-    endif
+    tmpD=data_01
+    tmpT=time_01
+    data_01=data_02
+    time_01=time_02
+    data_02=tmpD
+    time_02=tmpT
 endif
 
 s=''

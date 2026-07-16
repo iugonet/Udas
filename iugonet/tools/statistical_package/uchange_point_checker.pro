@@ -15,6 +15,7 @@
 ;
 ;MODIFICATIONS:
 ;A. Shinbori, 08/05/2013.
+;S. Imajo, 15/07/2026.
 ;
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -31,7 +32,7 @@ function alpha0, X
   for i=0,nX-1 do begin
     sum = sum + (i+1)*(X[i] - Xmean)
   endfor
-  result=(sum*12)/(nX*(nX+1)*(nX-1))
+  result=(sum*12)/(double(nX)*(nX+1)*(nX-1))
   return,result
 end
 
@@ -60,7 +61,7 @@ function alpha2, c, X
     sum = sum + (i + 1)*(X[i] - X2mean)
     ;sum = sum + (i + 1 - c_mean)*(X[i] - X2mean)
   endfor
-  result=(sum*12)/((nX-c)*(nX-c+1)*(nX-c-1))
+  result=(sum*12)/(double(nX-c)*(nX-c+1)*(nX-c-1))
   return,result
 end
 
@@ -184,5 +185,5 @@ pro uchange_point_checker, vname1
   plot,X3,xtitle='Time',ytitle='amplitude'
   plot,Fc3,xtitle='Time',ytitle='F'
 
-  print,where(Fc1 eq max(Fc1)),where(Fc2 eq max(Fc2)),where(Fc3 eq max(Fc3))
+  print,where(Fc1 eq max(Fc1)),where(Fc3 eq max(Fc3))
 end

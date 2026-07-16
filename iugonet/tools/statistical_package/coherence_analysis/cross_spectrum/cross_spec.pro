@@ -63,6 +63,7 @@
 ;
 ;MODIFICATIONS:
 ; A. Shinbori, 30/10/2011
+; S. Imajo, 15/07/2026.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -126,7 +127,7 @@ coh = coherency[0:ny/2]
 
 ; And the corresponding frequencies are
 freq = findgen(ny/2+1)/(ny*deltat)
-freq=freq[1:ny/2]
+freq=freq[0:ny/2]
 
 ; Extract the amplitude and phase components of the cross-spectrum
 amplitude = abs(crossspec12)

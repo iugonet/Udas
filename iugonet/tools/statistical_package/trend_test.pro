@@ -17,6 +17,7 @@
 ;MODIFICATIONS:
 ; A. Shinbori, 01/05/2013.
 ; A. Shinbori, 10/07/2013.
+; S. Imajo, 15/07/2026.
 ; 
 ;ACKNOWLEDGEMENT:
 ; $LastChangedBy: nikos $
@@ -79,10 +80,7 @@ Z=(y2D-E)/sqrt(V)
 
 ;Output of the trend test result on the console:
 print,'t=',Z
-thr_t=0
-for i=-5000,0 do begin
-   if sl*10000 eq round(gaussint(i*0.001)*10000) then thr_t=i*0.001
-endfor
+thr_t=-gauss_cvf(sl)
 print,'Max　|t| =',E/sqrt(V)
 print,'Threshold (at S_Level    =',sl,')   :',-thr_t
 
