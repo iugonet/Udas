@@ -62,6 +62,9 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
    +'The distribution of the data has been partly supported by the IUGONET (Inter-university Upper atmosphere Global Observation NETwork) project (http://www.iugonet.org/) funded by the Ministry of Education, Culture, Sports, Science and Technology (MEXT), Japan.'
   
 
+  if n_elements(level) eq 0 then level = ''
+  if n_elements(res) eq 0 then res = ''
+
   case strlowcase(sname) of
     'dst': tplot_dlimit = create_struct('data_att', $
       create_struct('acknowledgment', acknowledg_str_dst))
@@ -78,6 +81,10 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     if strcmp(level, 'prov', 4, /fold_case) eq 1 then begin
       tplot_name = 'wdc_mag_dst_prov'
       tplot_ytitle = 'Prov. Dst'
+    endif else if strcmp(level, 'real', 4, /fold_case) eq 1 or $
+      strlowcase(level) eq 'rt' then begin
+      tplot_name = 'wdc_mag_dst_real'
+      tplot_ytitle = 'Realtime Dst'
     endif else begin
       tplot_name = 'wdc_mag_dst'
       tplot_ytitle = 'Dst'
@@ -143,6 +150,9 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     endif else if res eq 'hour' or res eq 'hr' then begin
       tplot_name = tplot_name + '_1hr'
       tplot_ytitle = tplot_ytitle + '!c(hourly)'
+    endif else if res eq 'sec' then begin
+      tplot_name = tplot_name + '_1sec'
+      tplot_ytitle = tplot_ytitle + '!c(1-sec)'
     endif
     
     
@@ -168,7 +178,8 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
       tplot_name = tplot_name + '_prov'
       tplot_ytitle = tplot_ytitle + ' Prov.'
     endif else if strcmp(level, 'ql', 2, /fold_case) eq 1 or $
-      strlowcase(level) eq 'quicklook' then begin
+      strlowcase(level) eq 'quicklook' or $
+      strcmp(level, 'quas', 4, /fold_case) eq 1 then begin
       tplot_name = tplot_name + '_ql'
       tplot_ytitle = tplot_ytitle + ' QL'
     endif
@@ -179,6 +190,9 @@ pro iug_load_gmag_wdc_create_tplot_vars, $
     endif else if res eq 'hour' or res eq 'hr' then begin
       tplot_name = tplot_name + '_1hr'
       tplot_ytitle = tplot_ytitle + '!c(hourly)'
+    endif else if res eq 'sec' then begin
+      tplot_name = tplot_name + '_1sec'
+      tplot_ytitle = tplot_ytitle + '!c(1-sec)'
     endif
     
     if n_elements(element) gt 0 then begin
